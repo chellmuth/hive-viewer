@@ -1,12 +1,17 @@
 import 'dart:html';
+import 'dart:math' show Random;
 
 import '../lib/rect.dart';
 
-ImageElement whiteAntImage;
+Map assets = {};
 
 void main() {
-  whiteAntImage = new ImageElement(src: 'images/white-ant.png');
-  whiteAntImage.onLoad.listen((value) => render());
+  var assetNames = [ 'ant', 'beetle', 'grasshopper', 'queen', 'spider' ];
+  for (var assetName in assetNames) {
+    var image = new ImageElement(src: 'images/${assetName}.png');
+    image.onLoad.listen((value) => render());
+    assets[assetName] = image;
+  }
 }
 
 void render() {
@@ -29,9 +34,13 @@ class Tile {
   
   static final num pointHeight = .25;
   
+  static Random random;
+  
   num row, col;
   
-  Tile(this.row, this.col);
+  Tile(this.row, this.col) {
+    random = new Random();
+  }
 
   void draw(CanvasRenderingContext2D context) {
     var xOffset = this.col * width;
@@ -43,7 +52,9 @@ class Tile {
     xOffset += 1;
     yOffset += 1;
 
-    context.fillStyle = '#eee';
+    var isWhite = random.nextBool();
+    
+    context.fillStyle = isWhite ? '#fff' : '#888';
     context.strokeStyle = '#333';
     context.beginPath();
     context.moveTo(xOffset, yOffset + pointHeight * height);
@@ -58,13 +69,17 @@ class Tile {
     
     var imageRectHeight = height * (1 - 2 * pointHeight);
     var imageRect = new Rectangle(xOffset, yOffset + pointHeight * height, width, imageRectHeight);
-        
-    Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, whiteAntImage.width, whiteAntImage.height));
+       
+    var keys = assets.keys.toList();
+    int keyIndex = random.nextInt(keys.length);
+    var key = keys[keyIndex];
+    ImageElement asset = assets[key];
+
+    Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, asset.width, asset.height));
 //    context.strokeStyle = '#0f0';
 //    context.strokeRect(imageRect.left, imageRect.top, imageRect.width, imageRect.height);
 //    context.strokeStyle = '#00f';
 //    context.strokeRect(scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
-    
-    context.drawImageScaled(whiteAntImage, scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
+    context.drawImageScaled(asset, scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
   }
 }
