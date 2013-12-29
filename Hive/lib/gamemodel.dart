@@ -61,6 +61,20 @@ class Piece {
   num bugCount;
   
   Piece (this.player, this.bug, this.bugCount);
+  
+  bool operator ==(other) {
+    if (other is !Piece) { return false; }
+    return player == other.player && bug == other.bug && bugCount == other.bugCount; 
+  }
+
+  int get hashCode {
+    // This is crappy because of overflowing integers -> doubles in Dart.
+    int result = 17;
+    result = 37 * result + player.hashCode;
+    result = 37 * result + bug.hashCode;
+    result = 37 * result + bugCount.hashCode;
+    return result;
+  }
 }
 
 class Direction {
@@ -68,11 +82,9 @@ class Direction {
   const Direction._internal(this._value);
   toString() => 'Direction.$_value';
 
-  static const UP = const Direction._internal('UP');
   static const UP_RIGHT = const Direction._internal('UP_RIGHT');
   static const RIGHT = const Direction._internal('RIGHT');
   static const DOWN_RIGHT = const Direction._internal('DOWN_RIGHT');
-  static const DOWN = const Direction._internal('DOWN');
   static const DOWN_LEFT = const Direction._internal('DOWN_LEFT');
   static const LEFT = const Direction._internal('LEFT');
   static const UP_LEFT = const Direction._internal('UP_LEFT');
