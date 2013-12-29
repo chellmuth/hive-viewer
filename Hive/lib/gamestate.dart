@@ -34,7 +34,6 @@ class GameState {
   var pieceLocations = {};
   
   void processEvents(List<GameEvent> events) {
-    num count = 0;
     for (GameEvent event in events) {
       if (event.direction == null && event.relativePiece == null) {
         this.tiles.add(new Tile(0, 0, event.piece));
