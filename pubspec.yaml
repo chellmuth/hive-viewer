@@ -1,5 +1,5 @@
-name: hive
-description: A sample web application
+name: hive_viewer
+description: Replay Hive games saved in SGF format
 dependencies:
   browser: any
   drag_handler: '>=0.1.1 <1.0.0'
