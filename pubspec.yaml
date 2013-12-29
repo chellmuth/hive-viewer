@@ -1,6 +1,6 @@
-name: Hive
+name: hive
 description: A sample web application
 dependencies:
   browser: any
+  drag_handler: '>=0.1.1 <1.0.0'
   unittest: any
-  drag_handler: ">=0.1.1 <1.0.0"
