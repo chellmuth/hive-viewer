@@ -10,23 +10,23 @@ class Coordinate {
   Coordinate applyDirection(Direction direction) {
     switch(direction) {
       case Direction.UP_LEFT:
-        return this._evenRow ? new Coordinate(this.row - 1, this.col - 1) : new Coordinate(this.row - 1, this.col);
+        return _evenRow ? new Coordinate(row - 1, col - 1) : new Coordinate(row - 1, col);
       case Direction.UP_RIGHT:
-        return this._evenRow ? new Coordinate(this.row - 1, this.col) : new Coordinate(this.row - 1, this.col + 1);
+        return _evenRow ? new Coordinate(row - 1, col) : new Coordinate(row - 1, col + 1);
       case Direction.RIGHT:
-        return new Coordinate(this.row, this.col + 1);
+        return new Coordinate(row, col + 1);
       case Direction.DOWN_RIGHT:
-        return this._evenRow ? new Coordinate(this.row + 1, this.col) : new Coordinate(this.row + 1, this.col + 1);
+        return _evenRow ? new Coordinate(row + 1, col) : new Coordinate(row + 1, col + 1);
       case Direction.DOWN_LEFT:
-        return this._evenRow ? new Coordinate(this.row + 1, this.col - 1) : new Coordinate(this.row + 1, this.col);
+        return _evenRow ? new Coordinate(row + 1, col - 1) : new Coordinate(row + 1, col);
       case Direction.LEFT:
-        return new Coordinate(this.row, this.col - 1);
+        return new Coordinate(row, col - 1);
       case Direction.ABOVE:
-        return new Coordinate(this.row, this.col);
+        return new Coordinate(row, col);
     }
   }
   
-  bool get _evenRow => this.row % 2 == 0;
+  bool get _evenRow => row % 2 == 0;
 }
 
 class GameState {
@@ -42,27 +42,27 @@ class GameState {
   
   void step(num stepCount) {
     if (stepCount < 1) { stepCount = 1; }
-    this.tiles = [];
-    this.pieceLocations = {};
+    tiles = [];
+    pieceLocations = {};
 
     for (GameEvent event in events.take(stepCount)) {
       if (event.direction == null && event.relativePiece == null) {
-        this.tiles.add(new Tile(0, 0, event.piece));
-        this.pieceLocations[event.piece] = new Coordinate(0, 0);
+        tiles.add(new Tile(0, 0, event.piece));
+        pieceLocations[event.piece] = new Coordinate(0, 0);
         continue;
       }
   
-      Coordinate relativeLocation = this.pieceLocations[event.relativePiece];
+      Coordinate relativeLocation = pieceLocations[event.relativePiece];
       if (relativeLocation == null) {
         throw new Exception("Can't find relative piece");
       }
       var pieceLocation = relativeLocation.applyDirection(event.direction);
-      if (this.pieceLocations.containsKey(event.piece)) {
-        Coordinate previousLocation = this.pieceLocations[event.piece];
-        this.tiles.remove(new Tile(previousLocation.row, previousLocation.col, event.piece));
+      if (pieceLocations.containsKey(event.piece)) {
+        Coordinate previousLocation = pieceLocations[event.piece];
+        tiles.remove(new Tile(previousLocation.row, previousLocation.col, event.piece));
       }
-      this.pieceLocations[event.piece] = pieceLocation;
-      this.tiles.add(new Tile(pieceLocation.row, pieceLocation.col, event.piece));
+      pieceLocations[event.piece] = pieceLocation;
+      tiles.add(new Tile(pieceLocation.row, pieceLocation.col, event.piece));
     }
   }
   

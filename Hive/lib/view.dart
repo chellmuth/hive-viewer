@@ -19,7 +19,7 @@ class Tile {
   num dotCount;
   
   Tile(this.row, this.col, this.piece) {
-    this.dotCount = this.piece.bugCount;
+    dotCount = piece.bugCount;
   }
   
   bool operator ==(other) {
@@ -38,16 +38,16 @@ class Tile {
   }
 
   void draw(CanvasRenderingContext2D context) {
-    var xOffset = this.col * width;
-    if (this.row % 2 == 1) { xOffset += .5 * width; }
+    var xOffset = col * width;
+    if (row % 2 == 1) { xOffset += .5 * width; }
     
-    var yOffset = this.row * height * .75;
+    var yOffset = row * height * .75;
     
     // stroke borders intersect canvas bounds
     xOffset += 1;
     yOffset += 1;
     
-    context.fillStyle = this.piece.player == Player.WHITE ? '#fff' : '#888';
+    context.fillStyle = piece.player == Player.WHITE ? '#fff' : '#888';
     context.strokeStyle = '#333';
     context.beginPath();
     context.moveTo(xOffset, yOffset + pointHeight * height);
@@ -63,7 +63,7 @@ class Tile {
     var imageRectHeight = height * (1 - 2 * pointHeight);
     var imageRect = new Rectangle(xOffset, yOffset + pointHeight * height, width, imageRectHeight);
        
-    ImageElement asset = AssetLibrary.imageForBug(this.piece.bug);
+    ImageElement asset = AssetLibrary.imageForBug(piece.bug);
     Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, asset.width, asset.height));
 //    context.strokeStyle = '#0f0';
 //    context.strokeRect(imageRect.left, imageRect.top, imageRect.width, imageRect.height);
@@ -77,34 +77,34 @@ class Tile {
 //    context.fillStyle = '#00f';
 //    context.fillRect(dotContainerRect.left, dotContainerRect.top, dotContainerRect.width, dotContainerRect.height);
 
-    if (this.dotCount == 1) {
-      this._renderOneDot(context, dotContainerRect);
-    } else if (this.dotCount == 2) {
-      this._renderTwoDots(context, dotContainerRect);
-    } else if (this.dotCount == 3) {
-      this._renderThreeDots(context, dotContainerRect);
+    if (dotCount == 1) {
+      _renderOneDot(context, dotContainerRect);
+    } else if (dotCount == 2) {
+      _renderTwoDots(context, dotContainerRect);
+    } else if (dotCount == 3) {
+      _renderThreeDots(context, dotContainerRect);
     }
   }
   
   void _renderOneDot(CanvasRenderingContext2D context, Rectangle boundingRect) {
-    this._renderDot(context, boundingRect, 1/2, 1/2);
+    _renderDot(context, boundingRect, 1/2, 1/2);
   }
 
   void _renderTwoDots(CanvasRenderingContext2D context, Rectangle boundingRect) {
-    this._renderDot(context, boundingRect, 1/4, 1/2);
-    this._renderDot(context, boundingRect, 3/4, 1/2);
+    _renderDot(context, boundingRect, 1/4, 1/2);
+    _renderDot(context, boundingRect, 3/4, 1/2);
   }
   
   void _renderThreeDots(CanvasRenderingContext2D context, Rectangle boundingRect) {
-    this._renderDot(context, boundingRect, 1/4, 2/3);
-    this._renderDot(context, boundingRect, 3/4, 2/3);
-    this._renderDot(context, boundingRect, 1/2, 1/3);
+    _renderDot(context, boundingRect, 1/4, 2/3);
+    _renderDot(context, boundingRect, 3/4, 2/3);
+    _renderDot(context, boundingRect, 1/2, 1/3);
 }
   
   void _renderDot(CanvasRenderingContext2D context, Rectangle boundingRect, num xCenter, num yCenter) {
     context.save();
 
-    context.fillStyle = this.piece.player == Player.WHITE ? '#888' : '#fff';
+    context.fillStyle = piece.player == Player.WHITE ? '#888' : '#fff';
     context.beginPath();
     context.arc(boundingRect.left + xCenter * boundingRect.width, boundingRect.top + yCenter * boundingRect.height, dotRadius, 0, PI * 2, true);
     context.closePath();
