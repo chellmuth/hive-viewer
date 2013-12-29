@@ -5,25 +5,21 @@ import 'dart:math' show Random, PI;
 
 import 'rect.dart';
 import 'assets.dart';
+import 'gamemodel.dart';
 
 class Tile {
   static final num width = 80;
   static final num height = 90;
   
   static final num pointHeight = .25;
-  
   static final num dotRadius = 2;
-
-  static Random random;
   
   num row, col;
-  bool isWhite;
+  Piece piece;
   num dotCount;
   
-  Tile(this.row, this.col) {
-    random = new Random();
-    this.isWhite = random.nextBool();
-    this.dotCount = random.nextInt(3) + 1;
+  Tile(this.row, this.col, this.piece) {
+    this.dotCount = this.piece.bugCount;
   }
 
   void draw(CanvasRenderingContext2D context) {
@@ -36,7 +32,7 @@ class Tile {
     xOffset += 1;
     yOffset += 1;
     
-    context.fillStyle = this.isWhite ? '#fff' : '#888';
+    context.fillStyle = this.piece.player == Player.WHITE ? '#fff' : '#888';
     context.strokeStyle = '#333';
     context.beginPath();
     context.moveTo(xOffset, yOffset + pointHeight * height);
@@ -52,12 +48,7 @@ class Tile {
     var imageRectHeight = height * (1 - 2 * pointHeight);
     var imageRect = new Rectangle(xOffset, yOffset + pointHeight * height, width, imageRectHeight);
        
-    var assets = AssetLibrary.assets;
-    var keys = assets.keys.toList();
-    int keyIndex = random.nextInt(keys.length);
-    var key = keys[keyIndex];
-    ImageElement asset = assets[key];
-
+    ImageElement asset = AssetLibrary.imageForBug(this.piece.bug);
     Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, asset.width, asset.height));
 //    context.strokeStyle = '#0f0';
 //    context.strokeRect(imageRect.left, imageRect.top, imageRect.width, imageRect.height);
@@ -98,7 +89,7 @@ class Tile {
   void _renderDot(CanvasRenderingContext2D context, Rectangle boundingRect, num xCenter, num yCenter) {
     context.save();
 
-    context.fillStyle = this.isWhite ? '#888' : '#fff';
+    context.fillStyle = this.piece.player == Player.WHITE ? '#888' : '#fff';
     context.beginPath();
     context.arc(boundingRect.left + xCenter * boundingRect.width, boundingRect.top + yCenter * boundingRect.height, dotRadius, 0, PI * 2, true);
     context.closePath();

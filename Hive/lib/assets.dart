@@ -3,6 +3,8 @@ library assets;
 import 'dart:async';
 import 'dart:html';
 
+import 'gamemodel.dart';
+
 class AssetLibrary {
   static Map assets = {};
   Future _downloadsComplete;
@@ -16,5 +18,16 @@ class AssetLibrary {
       AssetLibrary.assets[assetName] = image;
     }
     return Future.wait(futures);
+  }
+  
+  static ImageElement imageForBug(Bug bug) {
+    switch (bug) {
+      case Bug.SPIDER: return assets['spider'];
+      case Bug.ANT: return assets['ant'];
+      case Bug.BEETLE: return assets['beetle'];
+      case Bug.GRASSHOPPER: return assets['grasshopper'];
+      case Bug.QUEEN: return assets['queen'];
+    }
+    throw new Exception("Unknown bug: " + bug.toString());
   }
 }

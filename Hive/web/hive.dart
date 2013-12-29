@@ -19,7 +19,6 @@ void start() {
     gamestate.processEvents(gameEvents);
     render(gamestate);
   });
-  
 }
 
 void render(GameState gamestate) {
