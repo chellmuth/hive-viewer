@@ -6,19 +6,34 @@ import '../lib/view.dart';
 import '../lib/assets.dart';
 import '../lib/parser.dart';
 
+var stepCount = 1;
 
 void main() {
   var assetLibrary = new AssetLibrary();
   assetLibrary.downloadAssets().then((values) => start());
 }
 
-void start() {
+void start() {    
   var gamestate = new GameState();
+
+  var nextButton = querySelector("#button_next_id");
+  nextButton.onClick.listen((_) => showNextMove(gamestate));
+
   SGF.downloadSGF().then((sgf) {
     var gameEvents = SGF.parseSGF(sgf);
-    gamestate.processEvents(gameEvents);
+    gamestate.initialize(gameEvents);
+    gamestate.step(stepCount);
+    stepCount += 1;
     render(gamestate);
+    
+    nextButton.disabled = false;
   });
+}
+
+void showNextMove(GameState gamestate) {
+  gamestate.step(stepCount);
+  stepCount += 1;
+  render(gamestate);
 }
 
 void render(GameState gamestate) {

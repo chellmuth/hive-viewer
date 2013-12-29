@@ -21,6 +21,21 @@ class Tile {
   Tile(this.row, this.col, this.piece) {
     this.dotCount = this.piece.bugCount;
   }
+  
+  bool operator ==(other) {
+    if (other is !Tile) { return false; }
+    return row == other.row && col == other.col && dotCount == other.dotCount && piece == other.piece; 
+  }
+
+  int get hashCode {
+    // This is crappy because of overflowing integers -> doubles in Dart.
+    int result = 17;
+    result = 37 * result + row.hashCode;
+    result = 37 * result + col.hashCode;
+    result = 37 * result + dotCount.hashCode;
+    result = 37 * result + piece.hashCode;
+    return result;
+  }
 
   void draw(CanvasRenderingContext2D context) {
     var xOffset = this.col * width;

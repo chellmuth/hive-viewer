@@ -30,11 +30,21 @@ class Coordinate {
 }
 
 class GameState {
-  var tiles = [];
-  var pieceLocations = {};
+  List<Tile> tiles = [];
+  Map<Piece, Coordinate> pieceLocations = {};
   
-  void processEvents(List<GameEvent> events) {
-    for (GameEvent event in events) {
+  List<GameEvent> events;
+
+  
+  void initialize(List<GameEvent> events) {
+    this.events = events;
+  }
+  
+  void step(num stepCount) {
+    this.tiles = [];
+    this.pieceLocations = {};
+
+    for (GameEvent event in events.take(stepCount)) {
       if (event.direction == null && event.relativePiece == null) {
         this.tiles.add(new Tile(0, 0, event.piece));
         this.pieceLocations[event.piece] = new Coordinate(0, 0);
@@ -46,11 +56,15 @@ class GameState {
         throw new Exception("Can't find relative piece");
       }
       var pieceLocation = relativeLocation.applyDirection(event.direction);
+      if (this.pieceLocations.containsKey(event.piece)) {
+        Coordinate previousLocation = this.pieceLocations[event.piece];
+        this.tiles.remove(new Tile(previousLocation.row, previousLocation.col, event.piece));
+      }
       this.pieceLocations[event.piece] = pieceLocation;
       this.tiles.add(new Tile(pieceLocation.row, pieceLocation.col, event.piece));
     }
   }
-
+  
   List<Tile> toList() {
     return tiles;
   }
