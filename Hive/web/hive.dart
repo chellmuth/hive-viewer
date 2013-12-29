@@ -22,6 +22,9 @@ void start() {
   var previousButton = querySelector("#button_previous_id");
   previousButton.onClick.listen((_) => showPreviousMove(gamestate));
 
+  var firstButton = querySelector("#button_first_id");
+  firstButton.onClick.listen((_) => showFirstMove(gamestate));
+
   SGF.downloadSGF().then((sgf) {
     var gameEvents = SGF.parseSGF(sgf);
     gamestate.initialize(gameEvents);
@@ -30,6 +33,7 @@ void start() {
     
     nextButton.disabled = false;
     previousButton.disabled = false;
+    firstButton.disabled = false;
   });
 }
 
@@ -42,6 +46,13 @@ void showNextMove(GameState gamestate) {
 
 void showPreviousMove(GameState gamestate) {
   stepCount -= 1;
+  gamestate.step(stepCount);
+  
+  render(gamestate);
+}
+
+void showFirstMove(GameState gamestate) {
+  stepCount = 1;
   gamestate.step(stepCount);
   
   render(gamestate);

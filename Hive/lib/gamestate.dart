@@ -41,7 +41,7 @@ class GameState {
   }
   
   void step(num stepCount) {
-    if (stepCount < 0) { stepCount = 0; }
+    if (stepCount < 1) { stepCount = 1; }
     this.tiles = [];
     this.pieceLocations = {};
 
