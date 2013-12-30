@@ -34,5 +34,5 @@ main() {
     expect(new Piece(Player.WHITE, Bug.ANT, 1).hashCode, isNot(equals(new Piece(Player.BLACK, Bug.ANT, 1).hashCode)));
     expect(new Piece(Player.WHITE, Bug.ANT, 1).hashCode, isNot(equals(new Piece(Player.WHITE, Bug.QUEEN, 1).hashCode)));
     expect(new Piece(Player.WHITE, Bug.ANT, 1).hashCode, isNot(equals(new Piece(Player.WHITE, Bug.ANT, 0).hashCode)));
-});
+  });
 }
