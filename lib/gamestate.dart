@@ -30,7 +30,7 @@ class Coordinate {
 }
 
 class GameState {
-  int _stepCount;
+  int _stepCount = 1;
   List<Tile> tiles = [];
   Map<Piece, Coordinate> pieceLocations = {};
 
@@ -44,11 +44,17 @@ class GameState {
   
   GameState copy() {
     GameState copy = new GameState();
-    copy.initialize(events);
+    var eventsCopy = [];
+    eventsCopy.addAll(events);
+    copy.initialize(eventsCopy);
     copy.step(_stepCount);
     return copy;
   }
-  
+
+  void appendGameEvent(GameEvent gameEvent) {
+    events.add(gameEvent);
+  }
+
   void step(num stepCount) {
     _stepCount = stepCount;
 
