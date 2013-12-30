@@ -16,8 +16,18 @@ void main() {
   assetLibrary.downloadAssets().then((values) => start());
 }
 
-void start() {    
+void start() {
   var gamestate = new GameState();
+
+  FileUploadInputElement fileUpload = querySelector("#file_upload_id");
+  fileUpload.onChange.listen((_) {
+    var files = fileUpload.files;
+    if (files.isEmpty) { return; }
+    var file = files.first;
+    var fileReader = new FileReader();
+    fileReader..readAsText(file)
+        ..onLoadEnd.listen((_) => setupSGF(fileReader.result, gamestate));
+  });
 
   var nextButton = querySelector("#button_next_id");
   nextButton.onClick.listen((_) => showNextMove(gamestate));
@@ -41,15 +51,20 @@ void start() {
   dragHandler.onDrag.listen(adjustCamera);
 
   SGF.downloadSGF().then((sgf) {
-    var gameEvents = SGF.parseSGF(sgf);
-    gamestate.initialize(gameEvents);
-    gamestate.step(stepCount);
-    render(gamestate);
-    
+    setupSGF(sgf, gamestate);
+
     nextButton.disabled = false;
     previousButton.disabled = false;
     firstButton.disabled = false;
   });
+}
+
+void setupSGF(String sgf, GameState gamestate) {
+  stepCount = 1;
+  var gameEvents = SGF.parseSGF(sgf);
+  gamestate.initialize(gameEvents);
+  gamestate.step(stepCount);
+  render(gamestate);
 }
 
 void showNextMove(GameState gamestate) {

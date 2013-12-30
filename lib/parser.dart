@@ -29,7 +29,7 @@ class SGF {
     if (!line.startsWith(';')) {
       return;
     }
-    var playerMoveExp = new RegExp(r"; P(\d)\[\d+ pdropb ([wb])([abgqs])([123])? \w+ \d+ ([^\]]+)]");
+    var playerMoveExp = new RegExp(r"; P(\d)\[\d+ p?dropb ([wb])([AaBbGgQqSs])([123])? \w+ \d+ ([^\]]+)]");
     var match = playerMoveExp.firstMatch(line);
     if (match != null) {
       print(line);
@@ -37,7 +37,7 @@ class SGF {
       return;
     }
 
-    var computerMoveExp = new RegExp(r"; P(\d)\[\d+ move ([WB]) ([ABGQS])([123])? \w+ \d+ ([^\]]+)\]");
+    var computerMoveExp = new RegExp(r"; P(\d)\[\d+ move ([WB]) [wb]?([ABGQS])([123])? \w+ \d+ ([^\]]+)\]");
     var computerMatch = computerMoveExp.firstMatch(line);
     if (computerMatch != null) {
       print(line);

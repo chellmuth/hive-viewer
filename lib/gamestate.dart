@@ -38,6 +38,8 @@ class GameState {
   
   void initialize(List<GameEvent> events) {
     this.events = events;
+    tiles = [];
+    pieceLocations = {};
   }
   
   void step(num stepCount) {
