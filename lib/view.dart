@@ -16,15 +16,12 @@ class Tile {
   
   num row, col;
   Piece piece;
-  num dotCount;
-  
-  Tile(this.row, this.col, this.piece) {
-    dotCount = piece.bugCount;
-  }
+
+  Tile(this.row, this.col, this.piece);
   
   bool operator ==(other) {
     if (other is !Tile) { return false; }
-    return row == other.row && col == other.col && dotCount == other.dotCount && piece == other.piece; 
+    return row == other.row && col == other.col && piece == other.piece; 
   }
 
   int get hashCode {
@@ -32,7 +29,6 @@ class Tile {
     int result = 17;
     result = 37 * result + row.hashCode;
     result = 37 * result + col.hashCode;
-    result = 37 * result + dotCount.hashCode;
     result = 37 * result + piece.hashCode;
     return result;
   }
@@ -77,11 +73,11 @@ class Tile {
 //    context.fillStyle = '#00f';
 //    context.fillRect(dotContainerRect.left, dotContainerRect.top, dotContainerRect.width, dotContainerRect.height);
 
-    if (dotCount == 1) {
+    if (piece.bugCount == 1) {
       _renderOneDot(context, dotContainerRect);
-    } else if (dotCount == 2) {
+    } else if (piece.bugCount == 2) {
       _renderTwoDots(context, dotContainerRect);
-    } else if (dotCount == 3) {
+    } else if (piece.bugCount == 3) {
       _renderThreeDots(context, dotContainerRect);
     }
   }
