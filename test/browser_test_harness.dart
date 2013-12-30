@@ -8,8 +8,10 @@ import '../lib/gamemodel.dart';
 import '../lib/gamestate.dart';
 
 part 'rules_test.dart';
+part 'gamestate_test.dart';
 
 main() {
   useHtmlConfiguration();
   TestRules.run();
+  TestGameState.run();
 }

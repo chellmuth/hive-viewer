@@ -30,19 +30,28 @@ class Coordinate {
 }
 
 class GameState {
+  int _stepCount;
   List<Tile> tiles = [];
   Map<Piece, Coordinate> pieceLocations = {};
-  
+
   List<GameEvent> events;
 
-  
   void initialize(List<GameEvent> events) {
     this.events = events;
     tiles = [];
     pieceLocations = {};
   }
   
+  GameState copy() {
+    GameState copy = new GameState();
+    copy.initialize(events);
+    copy.step(_stepCount);
+    return copy;
+  }
+  
   void step(num stepCount) {
+    _stepCount = stepCount;
+
     if (stepCount < 1) { stepCount = 1; }
     tiles = [];
     pieceLocations = {};
