@@ -78,6 +78,10 @@ class GameState {
     moves.add(move);
   }
 
+  void stepToEnd() {
+    step(moves.length);
+  }
+
   void step(num stepCount) {
     _stepCount = stepCount;
     tiles = [];

@@ -6,6 +6,7 @@ import 'dart:math' show Random, PI;
 import 'rect.dart';
 import 'assets.dart';
 import 'gamemodel.dart';
+import 'gamestate.dart';
 
 class Tile {
   static final num width = 80;
@@ -32,6 +33,8 @@ class Tile {
     result = 37 * result + piece.hashCode;
     return result;
   }
+  
+  Coordinate get coordinate => new Coordinate(row, col);
 
   void draw(CanvasRenderingContext2D context) {
     var xOffset = col * width;

@@ -5,6 +5,7 @@ class TestGameState {
     group('Game State:', () {
       group('Copy:', _copy);
       group('Append GameEvent:', _appendGameEvent);
+      group('Step to end:', _stepToEnd);
     });
     group('Coordinate:', _coordinate);
   }
@@ -71,6 +72,20 @@ class TestGameState {
       gamestate.step(2);
       expect(gamestate.toList(), equals([ new Tile(0, 0, piece1), new Tile(0, 1, piece2) ]));
     });
+  }
+
+  static void _stepToEnd() {
+    test('basic', () {
+      Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
+      Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece1, null, null),
+        new GameEvent(piece2, piece1, Direction.RIGHT)
+      ]);
+      gamestate.stepToEnd();
+      expect(gamestate.toList().length, equals(2));
+    });  
   }
 
   static void _coordinate() {
