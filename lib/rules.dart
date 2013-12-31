@@ -26,6 +26,8 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
   gamestate.stepToEnd();
   
   var tiles = gamestate.toList();
+  if (tiles.length == 1) { return true; }
+
   var checkedPieces = new Set<Piece>();
   
   void addNeighbors(Tile tile) {
@@ -47,8 +49,18 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
       }
     }
   }
+
   addNeighbors(tiles.first);
-  return checkedPieces.length == tiles.length;
+  if (checkedPieces.length != tiles.length) { return false; }
+
+  checkedPieces.clear();
+
+  tiles.removeWhere((tile) => tile.piece == move.piece);
+  addNeighbors(tiles.first);
+  if (checkedPieces.length != tiles.length) { return false; }
+
+  return true;
+
 }
 
 bool checkFreedomOfMovementRule(Move move, GameState gamestate) {
