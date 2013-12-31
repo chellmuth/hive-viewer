@@ -35,6 +35,15 @@ class Coordinate {
     }
     return false;
   }
+  
+  Direction direction(Coordinate other) {
+    for (var direction in Direction.all()) {
+      if (applyDirection(direction) == other) {
+        return direction;
+      }
+    }
+    throw new Exception("Invalid coordinates");
+  }
 
   bool operator ==(other) {
     if (other is !Coordinate) { return false; }

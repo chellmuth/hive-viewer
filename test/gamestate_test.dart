@@ -94,6 +94,11 @@ class TestGameState {
       expect(new Coordinate(20, 100), isNot(equals(new Coordinate(20, 20))));
       expect(new Coordinate(20, 100), isNot(equals(new Coordinate(100, 100))));
     });
+    
+    test('direction', () {
+      expect(new Coordinate(10, 12).direction(new Coordinate(9, 12)), equals(Direction.UP_RIGHT));
+      expect(new Coordinate(9, 12).direction(new Coordinate(8, 12)), equals(Direction.UP_LEFT));
+    });
 
     test('adjacent even row', () {
       Coordinate c = new Coordinate(2, 6);
