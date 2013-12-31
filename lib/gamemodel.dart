@@ -89,6 +89,18 @@ class Direction {
   static const LEFT = const Direction._internal('LEFT');
   static const UP_LEFT = const Direction._internal('UP_LEFT');
   static const ABOVE = const Direction._internal('ABOVE');
+  
+  static List<Direction> all() {
+    return [ 
+      Direction.UP_RIGHT,
+      Direction.RIGHT,
+      Direction.DOWN_RIGHT,
+      Direction.DOWN_LEFT,
+      Direction.LEFT,
+      Direction.UP_LEFT,
+      Direction.ABOVE
+    ];
+  }
 }
 
 class GameEvent {

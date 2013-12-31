@@ -27,6 +27,32 @@ class Coordinate {
     }
   }
   
+  bool isAdjacent(Coordinate other) {
+    for (var direction in Direction.all()) {
+      if (direction == Direction.ABOVE) { continue; }
+      
+      if (applyDirection(direction) == other) { return true; }
+    }
+    return false;
+  }
+
+  bool operator ==(other) {
+    if (other is !Coordinate) { return false; }
+    return row == other.row && col == other.col;
+  }
+
+  int get hashCode {
+    // This is crappy because of overflowing integers -> doubles in Dart.
+    int result = 17;
+    result = 37 * result + row.hashCode;
+    result = 37 * result + col.hashCode;
+    return result;
+  }
+
+  String toString() {
+    return '(${row}, ${col})';
+  }
+  
   bool get _evenRow => row % 2 == 0;
 }
 
