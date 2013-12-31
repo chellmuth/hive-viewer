@@ -2,6 +2,7 @@ library gamestate;
 
 import 'view.dart';
 import 'gamemodel.dart';
+import 'rules.dart';
 
 class Coordinate {
   num row, col;
@@ -32,55 +33,77 @@ class Coordinate {
 class GameState {
   int _stepCount = 1;
   List<Tile> tiles = [];
-  Map<Piece, Coordinate> pieceLocations = {};
-
-  List<GameEvent> events;
+  List<Move> moves = [];
 
   void initialize(List<GameEvent> events) {
-    this.events = events;
-    tiles = [];
-    pieceLocations = {};
+    moves = _mapGameEvents(events); 
   }
   
   GameState copy() {
     GameState copy = new GameState();
-    var eventsCopy = [];
-    eventsCopy.addAll(events);
-    copy.initialize(eventsCopy);
+    var movesCopy = [];
+    movesCopy.addAll(moves);
+    copy.moves = movesCopy;
     copy.step(_stepCount);
     return copy;
   }
 
-  void appendGameEvent(GameEvent gameEvent) {
-    events.add(gameEvent);
+  void appendMove(Move move) {
+    moves.add(move);
   }
 
   void step(num stepCount) {
     _stepCount = stepCount;
+    tiles = [];
 
     if (stepCount < 1) { stepCount = 1; }
-    tiles = [];
-    pieceLocations = {};
 
-    for (GameEvent event in events.take(stepCount)) {
-      if (event.direction == null && event.relativePiece == null) {
-        tiles.add(new Tile(0, 0, event.piece));
-        pieceLocations[event.piece] = new Coordinate(0, 0);
+    var pieceLocations = new Map<Piece, Coordinate>();
+
+    for (Move move in moves.take(stepCount)) {
+      if (move.currentLocation == null) {
+        tiles.add(new Tile(move.targetLocation.row, move.targetLocation.col, move.piece));
+        pieceLocations[move.piece] = move.targetLocation;
         continue;
       }
   
+      if (pieceLocations.containsKey(move.piece)) {
+        Coordinate currentLocation = move.currentLocation;
+        tiles.remove(new Tile(currentLocation.row, currentLocation.col, move.piece));
+      }
+      Coordinate targetLocation = move.targetLocation;
+      pieceLocations[move.piece] = targetLocation;
+      tiles.add(new Tile(targetLocation.row, targetLocation.col, move.piece));
+    }
+  }
+  
+  List<Move> _mapGameEvents(List<GameEvent> gameEvents) {
+    var moves = new List<Move>();
+    var pieceLocations = new Map<Piece, Coordinate>();
+
+    for (GameEvent event in gameEvents) {
+      if (event.direction == null && event.relativePiece == null) {
+        pieceLocations[event.piece] = new Coordinate(0, 0);
+        moves.add(new Move(event.piece, null, new Coordinate(0, 0)));
+        continue;
+      }
+
+      Coordinate currentLocation = null;
+      if (pieceLocations.containsKey(event.piece)) {
+        currentLocation = pieceLocations[event.piece];
+      }
+
       Coordinate relativeLocation = pieceLocations[event.relativePiece];
       if (relativeLocation == null) {
         throw new Exception("Can't find relative piece");
       }
-      var pieceLocation = relativeLocation.applyDirection(event.direction);
-      if (pieceLocations.containsKey(event.piece)) {
-        Coordinate previousLocation = pieceLocations[event.piece];
-        tiles.remove(new Tile(previousLocation.row, previousLocation.col, event.piece));
-      }
-      pieceLocations[event.piece] = pieceLocation;
-      tiles.add(new Tile(pieceLocation.row, pieceLocation.col, event.piece));
+      var targetLocation = relativeLocation.applyDirection(event.direction);
+      pieceLocations[event.piece] = targetLocation;
+      
+      moves.add(new Move(event.piece, currentLocation, targetLocation));
     }
+
+    return moves;
   }
   
   List<Tile> toList() {

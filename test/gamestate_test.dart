@@ -39,7 +39,7 @@ class TestGameState {
       expect(gamestate1.toList(), isNot(equals(gamestate2.toList())));
     });
     
-    test('unequal after append game event', () {
+    test('unequal after append move', () {
       Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
       GameState gamestate1 = new GameState();
       gamestate1.initialize([ 
@@ -49,7 +49,7 @@ class TestGameState {
       GameState gamestate2 = gamestate1.copy();
 
       Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
-      gamestate2.appendGameEvent(new GameEvent(piece2, piece1, Direction.RIGHT));
+      gamestate2.appendMove(new Move(piece2, null, new Coordinate(0, 1)));
       
       gamestate1.step(2);
       gamestate2.step(2);
@@ -66,7 +66,7 @@ class TestGameState {
       ]);
       
       Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
-      gamestate.appendGameEvent(new GameEvent(piece2, piece1, Direction.RIGHT));
+      gamestate.appendMove(new Move(piece2, null, new Coordinate(0, 1)));
       gamestate.step(2);
       expect(gamestate.toList(), equals([ new Tile(0, 0, piece1), new Tile(0, 1, piece2) ]));
     });
