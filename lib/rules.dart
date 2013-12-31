@@ -10,6 +10,20 @@ class Move {
   Coordinate targetLocation;
   
   Move(this.piece, this.currentLocation, this.targetLocation);
+
+  bool operator ==(other) {
+    if (other is !Move) { return false; }
+    return piece == other.piece && currentLocation == other.currentLocation && targetLocation == other.targetLocation; 
+  }
+
+  int get hashCode {
+    // This is crappy because of overflowing integers -> doubles in Dart.
+    int result = 17;
+    result = 37 * result + piece.hashCode;
+    result = 37 * result + currentLocation.hashCode;
+    result = 37 * result + targetLocation.hashCode;
+    return result;
+  }
 }
 
 List<Move> validMoves(GameState gamestate) {
