@@ -6,6 +6,7 @@ class TestGameState {
       group('Copy:', _copy);
       group('Append GameEvent:', _appendGameEvent);
       group('Step to end:', _stepToEnd);
+      group('Locate:', _locate);
     });
     group('Coordinate:', _coordinate);
   }
@@ -88,6 +89,24 @@ class TestGameState {
     });  
   }
 
+  static void _locate() {
+    test('basic', () {
+      Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
+      Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece1, null, null),
+        new GameEvent(piece2, piece1, Direction.RIGHT)
+      ]);
+      gamestate.stepToEnd();
+      gamestate.appendMove(new Move(piece1, new Coordinate(0, 0), new Coordinate(1, 1)));
+      gamestate.stepToEnd();
+      
+      expect(gamestate.locate(piece1), equals(new Coordinate(1, 1)));
+      expect(gamestate.locate(piece2), equals(new Coordinate(0, 1)));
+    });
+  }
+  
   static void _coordinate() {
     test('equality', () {
       expect(new Coordinate(20, 100), equals(new Coordinate(20, 100)));

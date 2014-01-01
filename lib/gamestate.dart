@@ -145,6 +145,11 @@ class GameState {
     return moves;
   }
   
+  Coordinate locate(Piece piece) {
+    var tile = tiles.firstWhere((tile) => tile.piece == piece);
+    return tile.coordinate;
+  }
+  
   List<Tile> toList() {
     return tiles;
   }
