@@ -120,7 +120,7 @@ class TestGameState {
       ]);
       gamestate.stepToEnd();
       var piece = _bG_;
-      expect(gamestate.neighbors(piece).length, equals(6));
+      expect(gamestate.neighbors(new Coordinate(2, 2)).length, equals(6));
     });
   }
   
