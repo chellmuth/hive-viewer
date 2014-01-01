@@ -45,18 +45,8 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
   var checkedPieces = new Set<Piece>();
   
   void addNeighbors(Tile tile) {
-    List<Tile> neighbors(Tile tile) {
-      var neighbors = [];
-      for (Tile possibleNeighbor in tiles) {
-        if (tile.coordinate.isAdjacent(possibleNeighbor.coordinate)) {
-          neighbors.add(possibleNeighbor);
-        }
-      }
-      return neighbors;
-    }
-
     checkedPieces.add(tile.piece);
-    for (Tile neighbor in neighbors(tile)) {
+    for (Tile neighbor in gamestate.neighbors(tile.piece)) {
       if (!checkedPieces.contains(neighbor.piece)) {
         checkedPieces.add(neighbor.piece);
         addNeighbors(neighbor);

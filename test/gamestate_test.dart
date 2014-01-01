@@ -7,6 +7,7 @@ class TestGameState {
       group('Append GameEvent:', _appendGameEvent);
       group('Step to end:', _stepToEnd);
       group('Locate:', _locate);
+      group('Neighbors:', _neighbors);
     });
     group('Coordinate:', _coordinate);
   }
@@ -104,6 +105,22 @@ class TestGameState {
       
       expect(gamestate.locate(piece1), equals(new Coordinate(1, 1)));
       expect(gamestate.locate(piece2), equals(new Coordinate(0, 1)));
+    });
+  }
+  
+  static void _neighbors() {
+    test('basic', () {
+      var _bG_ = new Piece(Player.BLACK, Bug.GRASSHOPPER, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ 'wG', '  ', '  ', '  ' ],
+          [ '  ', 'bA', 'wA', '  ' ],
+        [ '  ', 'bQ', _bG_, 'wQ' ],
+          [ '  ', 'bB', 'wB', '  ' ],
+        [ '  ', '  ', '  ', 'wG' ]
+      ]);
+      gamestate.stepToEnd();
+      var piece = _bG_;
+      expect(gamestate.neighbors(piece).length, equals(6));
     });
   }
   

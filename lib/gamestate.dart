@@ -150,6 +150,18 @@ class GameState {
     return tile.coordinate;
   }
   
+  List<Tile> neighbors(Piece piece) {
+    var tile = tiles.firstWhere((tile) => tile.piece == piece);
+
+    var neighbors = [];
+    for (Tile possibleNeighbor in tiles) {
+      if (tile.coordinate.isAdjacent(possibleNeighbor.coordinate)) {
+        neighbors.add(possibleNeighbor);
+      }
+    }
+    return neighbors;
+  }
+  
   List<Tile> toList() {
     return tiles;
   }
