@@ -24,6 +24,7 @@ class JumpMoveFinder {
         moves.add(new Move(piece, tile.coordinate, targetCoordinate));
       }
     }
-    return moves;
+    
+    return moves.where((move) => checkOneHiveRule(move, gamestate)).toList();
   }
 }

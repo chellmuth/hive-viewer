@@ -49,5 +49,36 @@ class TestMoveFinder {
       var moves = JumpMoveFinder.findMoves(piece, gamestate);
       expect(moves.isEmpty, isTrue);
     });
+
+    group('jump respects one hive rule', () {
+      test('basic hive split', () {
+        var _bG_ = new Piece(Player.BLACK, Bug.GRASSHOPPER, 1);
+        var gamestate = GameStateTestHelper.build([
+          [ '  ', 'bA', _bG_, 'bA', '  ' ]
+        ]);
+        gamestate.stepToEnd();
+
+        var piece = _bG_;
+        var moves = JumpMoveFinder.findMoves(piece, gamestate);
+        expect(moves.isEmpty, isTrue);
+      });
+
+      test('hive only splits during the jump', () {
+        var _bG_ = new Piece(Player.BLACK, Bug.GRASSHOPPER, 1);
+
+        // wA gets isolated during jump into __
+        var gamestate = GameStateTestHelper.build([
+          [ '  ', 'bA', '__', '  ' ],
+            [ 'bA', '  ', 'wA', '  ' ],
+          [ '  ', 'bA', '  ', _bG_ ],
+            [ '  ', 'bA', 'bA', '  ' ]
+        ]);
+        gamestate.stepToEnd();
+
+        var piece = _bG_;
+        var moves = JumpMoveFinder.findMoves(piece, gamestate);
+        expect(moves.firstWhere((move) => move.targetLocation == new Coordinate(0, 2), orElse: () => null), isNull);
+      });
+    });
   }
 }

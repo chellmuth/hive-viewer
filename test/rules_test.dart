@@ -86,6 +86,7 @@ class GameStateTestHelper {
         var value = row[colIndex];
         if (value is String) {
           if (value.trim().isEmpty) { continue; }
+          if (value == '__') { continue; }
           Player player = Player.parse(value[0]);
           Bug bug = Bug.parse(value[1]);
           var piece = new Piece(player, bug, bugCount++);
