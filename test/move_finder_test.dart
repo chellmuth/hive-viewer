@@ -195,5 +195,24 @@ class TestMoveFinder {
 
       expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
     });
+
+    test('slide respects constant contact', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      // attempt to move into __ without constant contact
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG', 'wG' ],
+          [ 'wG', '  ', 'wG' ],
+        [ '  ', '__', _bA_ ]
+      ]);
+      gamestate.stepToEnd();
+      Piece piece = _bA_;
+      var moves = RangedSlideMoveFinder.findMoves(1, piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(1, 1),
+        new Coordinate(2, 3)
+      ];
+
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
   }
 }

@@ -74,6 +74,7 @@ bool checkFreedomOfMovementRule(Move move, GameState gamestate) {
   return false;
 }
 
+// todo: this may be unnecessary if implemented implicitly in all move finders.
 bool checkConstantContactRule(Move move, GameState gamestate) {
   Direction moveDirection = move.currentLocation.direction(move.targetLocation);
   for (Direction adjacentDirection in moveDirection.adjacentDirections()) {

@@ -96,6 +96,7 @@ class RangedSlideMoveFinder {
       Move move = new Move(piece, currentLocation, targetLocation);
       if (!checkOneHiveRule(move, gamestate)) { return false; }
       if (!checkFreedomOfMovementRule(move, gamestate)) { return false; }
+
       gamestate.appendMove(move);
       gamestate.stepToEnd();
       currentLocation = targetLocation;
