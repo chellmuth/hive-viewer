@@ -19,6 +19,7 @@ class GameState {
     movesCopy.addAll(moves);
     copy.moves = movesCopy;
     copy.step(_stepCount);
+
     return copy;
   }
 

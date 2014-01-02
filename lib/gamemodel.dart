@@ -101,6 +101,18 @@ class Direction {
       Direction.ABOVE
     ];
   }
+  
+  List<Coordinate> adjacentDirections() {
+    switch (this) {
+      case UP_RIGHT: return [ UP_LEFT, RIGHT ];
+      case RIGHT: return [ UP_RIGHT, DOWN_RIGHT ];
+      case DOWN_RIGHT: return [ RIGHT, DOWN_LEFT ];
+      case DOWN_LEFT: return [ DOWN_RIGHT, LEFT ];
+      case LEFT: return [ DOWN_LEFT, UP_LEFT ];
+      case UP_LEFT: return [ LEFT, UP_RIGHT ];
+      case ABOVE: return [ UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN_LEFT, LEFT, UP_LEFT ];
+    }
+  }
 }
 
 class Coordinate {
