@@ -89,6 +89,16 @@ class GameState {
     return tile.coordinate;
   }
   
+  bool isLocationEmpty(Coordinate location) {
+    return pieceAt(location) == null;
+  }
+  
+  Piece pieceAt(Coordinate location) {
+    var tile = tiles.firstWhere((tile) => tile.coordinate == location, orElse: () => null);
+    if (tile == null) { return null; }
+    return tile.piece;
+  }
+  
   List<Tile> neighbors(Coordinate location) {
     var neighbors = [];
     for (Tile possibleNeighbor in tiles) {

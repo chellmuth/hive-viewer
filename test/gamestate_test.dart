@@ -8,6 +8,8 @@ class TestGameState {
       group('Step to end:', _stepToEnd);
       group('Locate:', _locate);
       group('Neighbors:', _neighbors);
+      group('Piece At:', _pieceAt);
+      group('Is Location Empty:', _isLocationEmpty);
     });
   }
 
@@ -122,4 +124,59 @@ class TestGameState {
       expect(gamestate.neighbors(new Coordinate(2, 2)).length, equals(6));
     });
   }
+  
+  static void _pieceAt() {
+    test('piece exists', () {
+      Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
+      Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece1, null, null),
+        new GameEvent(piece2, piece1, Direction.RIGHT)
+      ]);
+      gamestate.stepToEnd();
+      
+      expect(gamestate.pieceAt(new Coordinate(0, 0)), equals(piece1));
+      expect(gamestate.pieceAt(new Coordinate(0, 1)), equals(piece2));
+    });
+
+    test('piece doesn\'t exists', () {
+      Piece piece = new Piece(Player.WHITE, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece, null, null)
+      ]);
+      gamestate.stepToEnd();
+      
+      expect(gamestate.pieceAt(new Coordinate(1, 0)), isNull);
+    });
+  }
+  
+  static void _isLocationEmpty() {
+    test('location not empty', () {
+      Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
+      Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece1, null, null),
+        new GameEvent(piece2, piece1, Direction.RIGHT)
+      ]);
+      gamestate.stepToEnd();
+      
+      expect(gamestate.isLocationEmpty(new Coordinate(0, 0)), isNot(isTrue));
+      expect(gamestate.isLocationEmpty(new Coordinate(0, 1)), isNot(isTrue));
+    });
+
+    test('location is empty', () {
+      Piece piece = new Piece(Player.WHITE, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece, null, null)
+      ]);
+      gamestate.stepToEnd();
+      
+      expect(gamestate.isLocationEmpty(new Coordinate(1, 0)), isTrue);
+    });
+  }
+
 }
