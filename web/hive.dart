@@ -40,7 +40,7 @@ void start() {
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
   
   var canvas = querySelector("#hive_canvas_id");
-  canvas.onClick.listen((event) => handleCanvasClick(event));
+  canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
   
   var dragHandler = new DragHandler(canvas);
   
@@ -62,13 +62,17 @@ void start() {
   });
 }
 
-void handleCanvasClick(MouseEvent event) {
+void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var hexmap = new Hexmap(80, 90, .25);
 
   var canvas = querySelector("#hive_canvas_id");
   var initialTranslation = new Point(canvas.width / 2 - Tile.width / 2, canvas.height / 2 - Tile.height / 2);
   var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
   var coordinate = hexAtPoint(hexmap, translatedPoint);
+  for (Tile tile in gamestate.toList()) {
+      tile.highlight = tile.coordinate == coordinate; 
+  }
+  render(gamestate);
 }
 
 void setupSGF(String sgf, GameState gamestate) {
@@ -116,7 +120,14 @@ void render(GameState gamestate) {
   context.translate(camera.offsetX, camera.offsetY);
 
   for (Tile tile in gamestate.toList()) {
-    tile.draw(context);
+    if (!tile.highlight) {
+      tile.draw(context);
+    }
+  }
+  for (Tile tile in gamestate.toList()) {
+    if (tile.highlight) {
+      tile.draw(context);
+    }
   }
   context.restore();
 }

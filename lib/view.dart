@@ -16,6 +16,7 @@ class Tile {
   
   num row, col;
   Piece piece;
+  bool highlight = false;
 
   Tile(this.row, this.col, this.piece);
   
@@ -46,7 +47,7 @@ class Tile {
     yOffset += 1;
     
     context.fillStyle = piece.player == Player.WHITE ? '#fff' : '#888';
-    context.strokeStyle = '#333';
+    context.strokeStyle = highlight ? '#f00' : '#333';
     context.beginPath();
     context.moveTo(xOffset, yOffset + pointHeight * height);
     context.lineTo(xOffset + .5 * width, yOffset);
