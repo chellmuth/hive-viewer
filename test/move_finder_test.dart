@@ -135,5 +135,28 @@ class TestMoveFinder {
       var moves = RangedSlideMoveFinder.findMoves(1, piece, gamestate);
       expect(moves.isEmpty, isTrue);
     });
+
+    test('spider edge case can reach adjacent space', () {
+      var _bS_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
+      // spider can land in both adjacent __ by moving away initially
+      // todo: remove wQ after freedom of movement is added
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'bA', 'bA', '  '],
+          [ 'bA', '__', 'bA', '  ' ],
+        [ 'wQ', _bS_, '  ', 'bA' ],
+          [ 'bA', '__', 'bA', '  ' ],
+        [ '  ', 'bA', 'bA', '  ' ]
+      ]);
+      gamestate.stepToEnd();
+
+      var piece = _bS_;
+      var moves = RangedSlideMoveFinder.findMoves(3, piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(3, 1),
+        new Coordinate(1, 1)
+      ];
+
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
   }
 }
