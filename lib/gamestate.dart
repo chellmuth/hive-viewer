@@ -4,67 +4,6 @@ import 'view.dart';
 import 'gamemodel.dart';
 import 'rules.dart';
 
-class Coordinate {
-  num row, col;
-  Coordinate(this.row, this.col);
-  
-  Coordinate applyDirection(Direction direction) {
-    switch(direction) {
-      case Direction.UP_LEFT:
-        return _evenRow ? new Coordinate(row - 1, col - 1) : new Coordinate(row - 1, col);
-      case Direction.UP_RIGHT:
-        return _evenRow ? new Coordinate(row - 1, col) : new Coordinate(row - 1, col + 1);
-      case Direction.RIGHT:
-        return new Coordinate(row, col + 1);
-      case Direction.DOWN_RIGHT:
-        return _evenRow ? new Coordinate(row + 1, col) : new Coordinate(row + 1, col + 1);
-      case Direction.DOWN_LEFT:
-        return _evenRow ? new Coordinate(row + 1, col - 1) : new Coordinate(row + 1, col);
-      case Direction.LEFT:
-        return new Coordinate(row, col - 1);
-      case Direction.ABOVE:
-        return new Coordinate(row, col);
-    }
-  }
-  
-  bool isAdjacent(Coordinate other) {
-    for (var direction in Direction.all()) {
-      if (direction == Direction.ABOVE) { continue; }
-      
-      if (applyDirection(direction) == other) { return true; }
-    }
-    return false;
-  }
-  
-  Direction direction(Coordinate other) {
-    for (var direction in Direction.all()) {
-      if (applyDirection(direction) == other) {
-        return direction;
-      }
-    }
-    throw new Exception("Invalid coordinates");
-  }
-
-  bool operator ==(other) {
-    if (other is !Coordinate) { return false; }
-    return row == other.row && col == other.col;
-  }
-
-  int get hashCode {
-    // This is crappy because of overflowing integers -> doubles in Dart.
-    int result = 17;
-    result = 37 * result + row.hashCode;
-    result = 37 * result + col.hashCode;
-    return result;
-  }
-
-  String toString() {
-    return '(${row}, ${col})';
-  }
-  
-  bool get _evenRow => row % 2 == 0;
-}
-
 class GameState {
   int _stepCount = 1;
   List<Tile> tiles = [];
