@@ -94,8 +94,31 @@ class TestRules {
   }
 
   static void _constantContactRule() {
-    test('true', () {
-      expect(true, isTrue);
+    test('not maintaining constant contact', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      // attempt to move into __ without constant contact
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG', 'wG' ],
+          [ 'wG', '  ', 'wG' ],
+        [ '  ', '__', _bA_ ]
+      ]);
+      gamestate.stepToEnd();
+      Piece piece = _bA_;
+      Move move = new Move(piece, new Coordinate(2, 2), new Coordinate(2, 1));
+      expect(checkConstantContactRule(move, gamestate), isNot(isTrue));
+    });
+
+    test('maintain constant contact', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ 'wG', 'wG' ],
+          [ '__', _bA_ ],
+        [ '  ', '  ']
+      ]);
+      gamestate.stepToEnd();
+      Piece piece = _bA_;
+      Move move = new Move(piece, new Coordinate(1, 1), new Coordinate(1, 0));
+      expect(checkConstantContactRule(move, gamestate), isTrue);
     });
   }
 }

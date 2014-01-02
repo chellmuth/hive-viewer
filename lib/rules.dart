@@ -75,5 +75,10 @@ bool checkFreedomOfMovementRule(Move move, GameState gamestate) {
 }
 
 bool checkConstantContactRule(Move move, GameState gamestate) {
-  return true;
+  Direction moveDirection = move.currentLocation.direction(move.targetLocation);
+  for (Direction adjacentDirection in moveDirection.adjacentDirections()) {
+    Coordinate adjacentLocation = move.currentLocation.applyDirection(adjacentDirection);
+    if (!gamestate.isLocationEmpty(adjacentLocation)) { return true; }
+  }
+  return false;
 }
