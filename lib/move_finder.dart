@@ -72,7 +72,7 @@ class RangedSlideMoveFinder {
       if (moveLocations.contains(destinationLocation)) { continue; }
       if (new Set<Coordinate>.from(transition).length != transition.length) { continue; }
 
-      if (_checkOneHiveRuleOnTransition(transition, gamestate)) {
+      if (_checkRulesOnTransition(transition, gamestate)) {
         moveLocations.add(transition.last);
       }
     }
@@ -88,14 +88,16 @@ class RangedSlideMoveFinder {
     return moveLocations.map((location) => new Move(piece, startingLocation, location)).toList();    
   }
 
-  static bool _checkOneHiveRuleOnTransition(List<Coordinate> transition, GameState gamestate) {
+  static bool _checkRulesOnTransition(List<Coordinate> transition, GameState gamestate) {
     gamestate = gamestate.copy();
     Coordinate currentLocation = transition.first;
     Piece piece = gamestate.pieceAt(currentLocation);
     for (Coordinate targetLocation in transition.sublist(1)) {
       Move move = new Move(piece, currentLocation, targetLocation);
       if (!checkOneHiveRule(move, gamestate)) { return false; }
+      if (!checkFreedomOfMovementRule(move, gamestate)) { return false; }
       gamestate.appendMove(move);
+      gamestate.stepToEnd();
       currentLocation = targetLocation;
     }
     return true;

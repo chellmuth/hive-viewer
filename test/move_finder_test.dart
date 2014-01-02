@@ -139,11 +139,10 @@ class TestMoveFinder {
     test('spider edge case can reach adjacent space', () {
       var _bS_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
       // spider can land in both adjacent __ by moving away initially
-      // todo: remove wQ after freedom of movement is added
       var gamestate = GameStateTestHelper.build([
         [ '  ', 'bA', 'bA', '  '],
           [ 'bA', '__', 'bA', '  ' ],
-        [ 'wQ', _bS_, '  ', 'bA' ],
+        [ '  ', _bS_, '  ', 'bA' ],
           [ 'bA', '__', 'bA', '  ' ],
         [ '  ', 'bA', 'bA', '  ' ]
       ]);
@@ -154,6 +153,44 @@ class TestMoveFinder {
       var moveCoordinates = [
         new Coordinate(3, 1),
         new Coordinate(1, 1)
+      ];
+
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
+
+    test('slide respects freedom of movement', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      // attempt to move through gate into __
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG', 'wG', 'wG' ],
+          [ 'wG', '__', _bA_, 'wG' ],
+        [ '  ', 'wG', 'wG', 'wG' ]
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _bA_;
+      var moves = RangedSlideMoveFinder.findMoves(1, piece, gamestate);
+      expect(moves.isEmpty, isTrue);
+    });
+
+    test('respect freedom of movement mid-slide', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      // attempt to move through gate into __
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG', 'wG', 'wG', 'wG' ],
+          [ 'wG', '__', '  ', _bA_, 'wG' ],
+        [ '  ', 'wG', 'wG', '  ', 'wG' ],
+          [ '  ', '  ', 'wG', 'wG', '  ' ],
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _bA_;
+      var moves = RangedSlideMoveFinder.findMoves(2, piece, gamestate);
+
+      // the two adjacents are ok
+      var moveCoordinates = [
+        new Coordinate(2, 3),
+        new Coordinate(1, 2)
       ];
 
       expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
