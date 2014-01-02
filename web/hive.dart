@@ -52,6 +52,8 @@ void start() {
   };
   dragHandler.onDragStart.listen(adjustCamera);
   dragHandler.onDrag.listen(adjustCamera);
+  
+  window.onKeyDown.listen((event) => handleKeyPress(event, gamestate)); 
 
   SGF.downloadSGF().then((sgf) {
     setupSGF(sgf, gamestate);
@@ -60,6 +62,26 @@ void start() {
     previousButton.disabled = false;
     firstButton.disabled = false;
   });
+}
+
+void handleKeyPress(KeyboardEvent event, GameState gamestate) {
+  switch (event.keyCode) {
+    case 37: //left
+      stepCount -= 1;
+      break;
+    case 38: //up
+      stepCount = 1;
+      break;
+    case 39: //right
+      stepCount += 1;
+      break;
+    case 40: //down
+      stepCount = gamestate.moves.length;
+      break;
+    default: return;
+  }
+  gamestate.step(stepCount);
+  render(gamestate);
 }
 
 void handleCanvasClick(MouseEvent event, GameState gamestate) {
