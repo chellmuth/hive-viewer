@@ -82,44 +82,58 @@ class TestMoveFinder {
       });
     });
   }
-  
+
   static void _rangedSlideFinder() {
     test('slide once around a single piece', () {
-        var _bQ_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
-        var gamestate = GameStateTestHelper.build([
-          [ '  ', '  ' ],
-            [ 'bA', _bQ_ ],
-          [ '  ', '  ' ]
-        ]);
-        gamestate.stepToEnd();
-      
-        var piece = _bQ_;
-        var moves = RangedSlideMoveFinder.findMoves(1, piece, gamestate);
-        var moveCoordinates = [
-          new Coordinate(2, 1),
-          new Coordinate(0, 1)
-        ];
+      var _bQ_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', '  ' ],
+          [ 'bA', _bQ_ ],
+        [ '  ', '  ' ]
+      ]);
+      gamestate.stepToEnd();
 
-        expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+      var piece = _bQ_;
+      var moves = RangedSlideMoveFinder.findMoves(1, piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(2, 1),
+        new Coordinate(0, 1)
+      ];
+
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
     });
+
     test('slide twice around a single piece', () {
-        var _bQ_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
-        var gamestate = GameStateTestHelper.build([
-          [ '  ', '  ', '  ' ],
-            [ '  ', 'bA', _bQ_ ],
-          [ '  ', '  ', '  ' ]
-        ]);
-        gamestate.stepToEnd();
-      
-        var piece = _bQ_;
-        var moves = RangedSlideMoveFinder.findMoves(2, piece, gamestate);
-        var moveCoordinates = [
-          new Coordinate(2, 1),
-          new Coordinate(0, 1)
-        ];
+      var _bQ_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', '  ', '  ' ],
+          [ '  ', 'bA', _bQ_ ],
+        [ '  ', '  ', '  ' ]
+      ]);
+      gamestate.stepToEnd();
 
-        expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+      var piece = _bQ_;
+      var moves = RangedSlideMoveFinder.findMoves(2, piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(2, 1),
+        new Coordinate(0, 1)
+      ];
+
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
     });
 
+    test('slide respects one hive rule', () {
+      var _bQ_ = new Piece(Player.BLACK, Bug.QUEEN, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', '  ', '  ' ],
+          [ 'bA', _bQ_, 'bA' ],
+        [ '  ', '  ', '  ' ]
+      ]);
+      gamestate.stepToEnd();
+
+      var piece = _bQ_;
+      var moves = RangedSlideMoveFinder.findMoves(1, piece, gamestate);
+      expect(moves.isEmpty, isTrue);
+    });
   }
 }

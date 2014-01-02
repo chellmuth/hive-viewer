@@ -65,10 +65,14 @@ class RangedSlideMoveFinder {
     return transitionLists;
   }
 
-  static Set<Coordinate> _buildMoveLocationsFromTransitionLists(int range, List<List<Coordinate>> transitionLists) {
+  static Set<Coordinate> _buildMoveLocationsFromTransitionLists(List<List<Coordinate>> transitionLists, GameState gamestate) {
     var moveLocations = new Set<Coordinate>();
     for (List<Coordinate> transition in transitionLists) {
-      if (new Set<Coordinate>.from(transition).length == range + 1) {
+      Coordinate destinationLocation = transition.last;
+      if (moveLocations.contains(destinationLocation)) { continue; }
+      if (new Set<Coordinate>.from(transition).length != transition.length) { continue; }
+
+      if (_checkOneHiveRuleOnTransition(transition, gamestate)) {
         moveLocations.add(transition.last);
       }
     }
@@ -79,8 +83,21 @@ class RangedSlideMoveFinder {
     var startingLocation = gamestate.locate(piece);
 
     List<List<Coordinate>> transitionLists = _buildTransitionLists(range, piece, gamestate); 
-    Set<Coordinate> moveLocations = _buildMoveLocationsFromTransitionLists(range, transitionLists);
+    Set<Coordinate> moveLocations = _buildMoveLocationsFromTransitionLists(transitionLists, gamestate);
 
     return moveLocations.map((location) => new Move(piece, startingLocation, location)).toList();    
-  } 
+  }
+
+  static bool _checkOneHiveRuleOnTransition(List<Coordinate> transition, GameState gamestate) {
+    gamestate = gamestate.copy();
+    Coordinate currentLocation = transition.first;
+    Piece piece = gamestate.pieceAt(currentLocation);
+    for (Coordinate targetLocation in transition.sublist(1)) {
+      Move move = new Move(piece, currentLocation, targetLocation);
+      if (!checkOneHiveRule(move, gamestate)) { return false; }
+      gamestate.appendMove(move);
+      currentLocation = targetLocation;
+    }
+    return true;
+  }
 }
