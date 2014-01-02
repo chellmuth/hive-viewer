@@ -6,7 +6,6 @@ import 'dart:math' show Random, PI;
 import 'rect.dart';
 import 'assets.dart';
 import 'gamemodel.dart';
-import 'gamestate.dart';
 
 class Tile {
   static final num width = 80;
