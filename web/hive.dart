@@ -64,8 +64,11 @@ void start() {
 
 void handleCanvasClick(MouseEvent event) {
   var hexmap = new Hexmap(80, 90, .25);
-  var coordinate = hexAtPoint(hexmap, event.client);
-  print(coordinate);
+
+  var canvas = querySelector("#hive_canvas_id");
+  var initialTranslation = new Point(canvas.width / 2 - Tile.width / 2, canvas.height / 2 - Tile.height / 2);
+  var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
+  var coordinate = hexAtPoint(hexmap, translatedPoint);
 }
 
 void setupSGF(String sgf, GameState gamestate) {
