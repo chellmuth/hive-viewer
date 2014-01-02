@@ -64,8 +64,32 @@ class TestRules {
   }
 
   static void _freedomOfMovementRule() {
-    test('true', () {
-      expect(true, isTrue);
+    test('can move through door', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      // attempt to move through door into __
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', '  ', _bA_ ],
+          [ 'wG', '__', 'wG' ],
+        [ '  ', 'wG', 'wG' ]
+      ]);
+      gamestate.stepToEnd();
+      Piece piece = _bA_;
+      Move move = new Move(piece, new Coordinate(0, 2), new Coordinate(1, 1));
+      expect(checkFreedomOfMovementRule(move, gamestate), isTrue);
+    });
+
+    test('cannot move through gate', () {
+      var _bA_ = new Piece(Player.WHITE, Bug.ANT, 1);
+      // attempt to move through gate into __
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG', 'wG' ],
+          [ 'wG', '__', _bA_ ],
+        [ '  ', 'wG', 'wG' ]
+      ]);
+      gamestate.stepToEnd();
+      Piece piece = _bA_;
+      Move move = new Move(piece, new Coordinate(1, 2), new Coordinate(1, 1));
+      expect(checkFreedomOfMovementRule(move, gamestate), isNot(isTrue));
     });
   }
 

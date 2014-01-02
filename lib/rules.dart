@@ -61,14 +61,17 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
 
   tiles.removeWhere((tile) => tile.piece == move.piece);
   addNeighbors(tiles.first);
-  if (checkedPieces.length != tiles.length) { return false; }
 
-  return true;
-
+  return checkedPieces.length == tiles.length;
 }
 
 bool checkFreedomOfMovementRule(Move move, GameState gamestate) {
-  return true;
+  Direction moveDirection = move.currentLocation.direction(move.targetLocation);
+  for (Direction adjacentDirection in moveDirection.adjacentDirections()) {
+    Coordinate adjacentLocation = move.currentLocation.applyDirection(adjacentDirection);
+    if (gamestate.isLocationEmpty(adjacentLocation)) { return true; }
+  }
+  return false;
 }
 
 bool checkConstantContactRule(Move move, GameState gamestate) {
