@@ -7,6 +7,7 @@ import '../lib/gamestate.dart';
 import '../lib/view.dart';
 import '../lib/assets.dart';
 import '../lib/parser.dart';
+import '../lib/hex_math.dart';
 
 var stepCount = 1;
 var camera = new Camera();
@@ -39,6 +40,8 @@ void start() {
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
   
   var canvas = querySelector("#hive_canvas_id");
+  canvas.onClick.listen((event) => handleCanvasClick(event));
+  
   var dragHandler = new DragHandler(canvas);
   
   var adjustCamera = (DragEvent e) {
@@ -57,6 +60,12 @@ void start() {
     previousButton.disabled = false;
     firstButton.disabled = false;
   });
+}
+
+void handleCanvasClick(MouseEvent event) {
+  var hexmap = new Hexmap(80, 90, .25);
+  var coordinate = hexAtPoint(hexmap, event.client);
+  print(coordinate);
 }
 
 void setupSGF(String sgf, GameState gamestate) {

@@ -15,7 +15,16 @@ class Hexmap {
 }
 
 Coordinate hexAtPoint(Hexmap hexmap, Point point) {
-
+  var radius = 0;
+  while (true) {
+    List<Coordinate> ring = hexRing(radius);
+    for (Coordinate hex in ring) {
+      if (checkHex(hexmap, hex, point)) {
+        return hex;
+      }
+    }
+    radius += 1;
+  }
 }
 
 List<Coordinate> hexRing(int radius) {
