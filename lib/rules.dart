@@ -29,10 +29,6 @@ List<Move> validMoves(GameState gamestate) {
   return [];
 }
 
-List<Move> validMovesForPiece(Piece piece, GameState gamestate) {
-  return [];
-}
-
 bool checkOneHiveRule(Move move, GameState gamestate) {
   gamestate = gamestate.copy();
   gamestate.appendMove(move);

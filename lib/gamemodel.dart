@@ -1,5 +1,9 @@
 library gamemodel;
 
+import 'gamestate.dart';
+import 'rules.dart';
+import 'move_finder.dart';
+
 class Player {
   final _value;
   const Player._internal(this._value);
@@ -58,7 +62,7 @@ class Bug {
 class Piece {
   Player player;
   Bug bug;
-  num bugCount;
+  int bugCount;
   
   Piece (this.player, this.bug, this.bugCount);
   
@@ -74,6 +78,10 @@ class Piece {
     result = 37 * result + bug.hashCode;
     result = 37 * result + bugCount.hashCode;
     return result;
+  }
+
+  List<Move> moves(GameState gamestate) {
+    return RangedSlideMoveFinder.findMoves(2, this, gamestate);
   }
 }
 

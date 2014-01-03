@@ -6,6 +6,11 @@ import 'gamemodel.dart';
 import 'gamestate.dart';
 import 'rules.dart';
 
+
+List<Move> validMovesForPiece(Piece piece, GameState gamestate) {
+  return [];
+}
+
 class JumpMoveFinder {
   static List<Move> findMoves(Piece piece, GameState gamestate) {
     var moves = new List<Move>();
