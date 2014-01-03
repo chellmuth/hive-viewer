@@ -80,6 +80,8 @@ class GameState {
 
       Coordinate relativeLocation = pieceLocations[event.relativePiece];
       if (relativeLocation == null) {
+        print (pieceLocations);
+        print (event.relativePiece);
         throw new Exception("Can't find relative piece");
       }
       var targetLocation = relativeLocation.applyDirection(event.direction);

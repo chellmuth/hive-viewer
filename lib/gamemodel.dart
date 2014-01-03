@@ -4,6 +4,8 @@ import 'gamestate.dart';
 import 'rules.dart';
 import 'move_finder.dart';
 
+part 'piece_impl.dart';
+
 class Player {
   final _value;
   const Player._internal(this._value);
@@ -64,7 +66,22 @@ class Piece {
   Bug bug;
   int bugCount;
   
-  Piece (this.player, this.bug, this.bugCount);
+  Piece._internal(this.player, this.bug, this.bugCount);
+  
+  factory Piece(player, bug, bugCount) {
+    switch (bug) {
+      case Bug.ANT:
+        return new Ant._internal(player, bugCount);
+      case Bug.BEETLE:
+        return new Beetle._internal(player, bugCount);
+      case Bug.GRASSHOPPER:
+        return new Grasshopper._internal(player, bugCount);
+      case Bug.QUEEN:
+        return new Queen._internal(player, bugCount);
+      case Bug.SPIDER:
+        return new Spider._internal(player, bugCount);
+    }
+  }
   
   bool operator ==(other) {
     if (other is !Piece) { return false; }
