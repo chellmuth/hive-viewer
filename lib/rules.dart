@@ -2,7 +2,6 @@ library rules;
 
 import 'gamemodel.dart';
 import 'gamestate.dart';
-import 'view.dart';
 
 class Move {
   Piece piece;

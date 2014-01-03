@@ -1,6 +1,5 @@
 library gamestate;
 
-import 'view.dart';
 import 'gamemodel.dart';
 import 'rules.dart';
 

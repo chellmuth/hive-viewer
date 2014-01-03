@@ -1,4 +1,4 @@
-part of hive_test;
+part of hive_console_test;
 
 class TestMoveFinder {
   static void run() {

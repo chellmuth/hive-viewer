@@ -1,4 +1,4 @@
-part of hive_test;
+part of hive_console_test;
 
 class TestGameState {
   static void run() {

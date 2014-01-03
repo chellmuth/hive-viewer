@@ -5,7 +5,6 @@ import 'dart:collection';
 import 'gamemodel.dart';
 import 'gamestate.dart';
 import 'rules.dart';
-import 'view.dart';
 
 class JumpMoveFinder {
   static List<Move> findMoves(Piece piece, GameState gamestate) {
