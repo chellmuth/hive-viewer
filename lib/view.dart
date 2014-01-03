@@ -1,53 +1,35 @@
 library view;
 
 import 'dart:html';
-import 'dart:math' show Random, PI;
+import 'dart:math' show PI;
 
 import 'rect.dart';
 import 'assets.dart';
 import 'gamemodel.dart';
 
-class Tile {
+class TileView {
   static final num width = 80;
   static final num height = 90;
   
   static final num pointHeight = .25;
   static final num dotRadius = 2;
   
-  num row, col;
-  Piece piece;
-  bool highlight = false;
-
-  Tile(this.row, this.col, this.piece);
+  Tile tile;
   
-  bool operator ==(other) {
-    if (other is !Tile) { return false; }
-    return row == other.row && col == other.col && piece == other.piece; 
-  }
-
-  int get hashCode {
-    // This is crappy because of overflowing integers -> doubles in Dart.
-    int result = 17;
-    result = 37 * result + row.hashCode;
-    result = 37 * result + col.hashCode;
-    result = 37 * result + piece.hashCode;
-    return result;
-  }
-  
-  Coordinate get coordinate => new Coordinate(row, col);
+  TileView(this.tile);
 
   void draw(CanvasRenderingContext2D context) {
-    var xOffset = col * width;
-    if (row % 2 == 1) { xOffset += .5 * width; }
+    var xOffset = tile.col * width;
+    if (tile.row % 2 == 1) { xOffset += .5 * width; }
     
-    var yOffset = row * height * .75;
+    var yOffset = tile.row * height * .75;
     
     // stroke borders intersect canvas bounds
     xOffset += 1;
     yOffset += 1;
     
-    context.fillStyle = piece.player == Player.WHITE ? '#fff' : '#888';
-    context.strokeStyle = highlight ? '#f00' : '#333';
+    context.fillStyle = tile.piece.player == Player.WHITE ? '#fff' : '#888';
+    context.strokeStyle = tile.highlight ? '#f00' : '#333';
     context.beginPath();
     context.moveTo(xOffset, yOffset + pointHeight * height);
     context.lineTo(xOffset + .5 * width, yOffset);
@@ -62,7 +44,7 @@ class Tile {
     var imageRectHeight = height * (1 - 2 * pointHeight);
     var imageRect = new Rectangle(xOffset, yOffset + pointHeight * height, width, imageRectHeight);
        
-    ImageElement asset = AssetLibrary.imageForBug(piece.bug);
+    ImageElement asset = AssetLibrary.imageForBug(tile.piece.bug);
     Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, asset.width, asset.height));
 //    context.strokeStyle = '#0f0';
 //    context.strokeRect(imageRect.left, imageRect.top, imageRect.width, imageRect.height);
@@ -76,11 +58,11 @@ class Tile {
 //    context.fillStyle = '#00f';
 //    context.fillRect(dotContainerRect.left, dotContainerRect.top, dotContainerRect.width, dotContainerRect.height);
 
-    if (piece.bugCount == 1) {
+    if (tile.piece.bugCount == 1) {
       _renderOneDot(context, dotContainerRect);
-    } else if (piece.bugCount == 2) {
+    } else if (tile.piece.bugCount == 2) {
       _renderTwoDots(context, dotContainerRect);
-    } else if (piece.bugCount == 3) {
+    } else if (tile.piece.bugCount == 3) {
       _renderThreeDots(context, dotContainerRect);
     }
   }
@@ -103,7 +85,7 @@ class Tile {
   void _renderDot(CanvasRenderingContext2D context, Rectangle boundingRect, num xCenter, num yCenter) {
     context.save();
 
-    context.fillStyle = piece.player == Player.WHITE ? '#888' : '#fff';
+    context.fillStyle = tile.piece.player == Player.WHITE ? '#888' : '#fff';
     context.beginPath();
     context.arc(boundingRect.left + xCenter * boundingRect.width, boundingRect.top + yCenter * boundingRect.height, dotRadius, 0, PI * 2, true);
     context.closePath();

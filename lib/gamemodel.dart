@@ -176,6 +176,31 @@ class Coordinate {
   bool get _evenRow => row % 2 == 0;
 }
 
+class Tile {
+  num row, col;
+  Piece piece;
+  
+  bool highlight = false;
+
+  Tile(this.row, this.col, this.piece);
+  
+  bool operator ==(other) {
+    if (other is !Tile) { return false; }
+    return row == other.row && col == other.col && piece == other.piece; 
+  }
+
+  int get hashCode {
+    // This is crappy because of overflowing integers -> doubles in Dart.
+    int result = 17;
+    result = 37 * result + row.hashCode;
+    result = 37 * result + col.hashCode;
+    result = 37 * result + piece.hashCode;
+    return result;
+  }
+  
+  Coordinate get coordinate => new Coordinate(row, col);
+}
+
 class GameEvent {
   Piece piece;
   
