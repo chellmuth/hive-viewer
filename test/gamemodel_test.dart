@@ -54,26 +54,26 @@ void _coordinate() {
   test('adjacent even row', () {
     Coordinate c = new Coordinate(2, 6);
     var adjacentCoordinates = [
-                               new Coordinate(2, 5), // start left, move clockwise
-                               new Coordinate(1, 5),
-                               new Coordinate(1, 6),
-                               new Coordinate(2, 7),
-                               new Coordinate(3, 5),
-                               new Coordinate(3, 6)
-                               ];
+      new Coordinate(2, 5), // start left, move clockwise
+      new Coordinate(1, 5),
+      new Coordinate(1, 6),
+      new Coordinate(2, 7),
+      new Coordinate(3, 5),
+      new Coordinate(3, 6)
+    ];
     for (var adjacentCoordinate in adjacentCoordinates) {
       expect(c.isAdjacent(adjacentCoordinate), isTrue);
     }
 
     var nonAdjacentCoordinates = [
-                                  new Coordinate(2, 6),
-                                  new Coordinate(2, 4),
-                                  new Coordinate(2, 8),
-                                  new Coordinate(1, 4),
-                                  new Coordinate(1, 7),
-                                  new Coordinate(3, 4),
-                                  new Coordinate(3, 7)
-                                  ];
+      new Coordinate(2, 6),
+      new Coordinate(2, 4),
+      new Coordinate(2, 8),
+      new Coordinate(1, 4),
+      new Coordinate(1, 7),
+      new Coordinate(3, 4),
+      new Coordinate(3, 7)
+    ];
     for (var nonAdjacentCoordinate in nonAdjacentCoordinates) {
       expect(c.isAdjacent(nonAdjacentCoordinate), isNot(isTrue));
     }
@@ -82,26 +82,26 @@ void _coordinate() {
   test('adjacent odd row', () {
     Coordinate c = new Coordinate(3, 6);
     var adjacentCoordinates = [
-                               new Coordinate(3, 5), // start left, move clockwise
-                               new Coordinate(2, 6),
-                               new Coordinate(2, 7),
-                               new Coordinate(3, 7),
-                               new Coordinate(4, 6),
-                               new Coordinate(4, 7)
-                               ];
+      new Coordinate(3, 5), // start left, move clockwise
+      new Coordinate(2, 6),
+      new Coordinate(2, 7),
+      new Coordinate(3, 7),
+      new Coordinate(4, 6),
+      new Coordinate(4, 7)
+    ];
     for (var adjacentCoordinate in adjacentCoordinates) {
       expect(c.isAdjacent(adjacentCoordinate), isTrue);
     }
 
     var nonAdjacentCoordinates = [
-                                  new Coordinate(3, 6),
-                                  new Coordinate(3, 4),
-                                  new Coordinate(3, 8),
-                                  new Coordinate(2, 5),
-                                  new Coordinate(2, 8),
-                                  new Coordinate(4, 5),
-                                  new Coordinate(4, 8)
-                                  ];
+      new Coordinate(3, 6),
+      new Coordinate(3, 4),
+      new Coordinate(3, 8),
+      new Coordinate(2, 5),
+      new Coordinate(2, 8),
+      new Coordinate(4, 5),
+      new Coordinate(4, 8)
+    ];
     for (var nonAdjacentCoordinate in nonAdjacentCoordinates) {
       expect(c.isAdjacent(nonAdjacentCoordinate), isNot(isTrue));
     }
