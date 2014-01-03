@@ -4,7 +4,7 @@ class Ant extends Piece {
   Ant._internal(player, bugCount) : super._internal(player, Bug.ANT, bugCount);
 
   List<Move> moves(GameState gamestate) {
-    return [];
+    return SlideMoveFinder.findMoves(this, gamestate);
   }
 }
 
