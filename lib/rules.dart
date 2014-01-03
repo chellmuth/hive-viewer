@@ -16,12 +16,7 @@ class Move {
   }
 
   int get hashCode {
-    // This is crappy because of overflowing integers -> doubles in Dart.
-    int result = 17;
-    result = 37 * result + piece.hashCode;
-    result = 37 * result + currentLocation.hashCode;
-    result = 37 * result + targetLocation.hashCode;
-    return result;
+    return piece.hashCode ^ currentLocation.hashCode ^ targetLocation.hashCode;
   }
 }
 

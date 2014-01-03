@@ -72,12 +72,7 @@ class Piece {
   }
 
   int get hashCode {
-    // This is crappy because of overflowing integers -> doubles in Dart.
-    int result = 17;
-    result = 37 * result + player.hashCode;
-    result = 37 * result + bug.hashCode;
-    result = 37 * result + bugCount.hashCode;
-    return result;
+    return player.hashCode ^ bug.hashCode ^ bugCount.hashCode;
   }
 
   List<Move> moves(GameState gamestate) {
@@ -170,11 +165,7 @@ class Coordinate {
   }
 
   int get hashCode {
-    // This is crappy because of overflowing integers -> doubles in Dart.
-    int result = 17;
-    result = 37 * result + row.hashCode;
-    result = 37 * result + col.hashCode;
-    return result;
+    return row.hashCode ^ col.hashCode;
   }
 
   String toString() {
@@ -198,12 +189,7 @@ class Tile {
   }
 
   int get hashCode {
-    // This is crappy because of overflowing integers -> doubles in Dart.
-    int result = 17;
-    result = 37 * result + row.hashCode;
-    result = 37 * result + col.hashCode;
-    result = 37 * result + piece.hashCode;
-    return result;
+    return row.hashCode ^ col.hashCode ^ piece.hashCode;
   }
   
   Coordinate get coordinate => new Coordinate(row, col);
