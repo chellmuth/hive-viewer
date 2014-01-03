@@ -156,11 +156,6 @@ void render(GameState gamestate, { List<Move> moves : null }) {
       tileView.draw(context);
     }
   }
-  for (TileView tileView in tileViews) {
-    if (tileView.tile.highlight) {
-      tileView.draw(context);
-    }
-  }
 
   if (moves == null) { moves = []; }
   Iterable<MoveView> moveViews = moves.map((move) => new MoveView(move.targetLocation));
@@ -168,6 +163,12 @@ void render(GameState gamestate, { List<Move> moves : null }) {
     moveView.draw(context);
   }
   
+  for (TileView tileView in tileViews) {
+    if (tileView.tile.highlight) {
+      tileView.draw(context);
+    }
+  }
+
   context.restore();
 }
 
