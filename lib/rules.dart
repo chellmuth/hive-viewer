@@ -27,7 +27,7 @@ List<Move> validMoves(GameState gamestate) {
 bool checkOneHiveRule(Move move, GameState gamestate) {
   gamestate = gamestate.copy();
   gamestate.appendMove(move);
-  gamestate.stepToEnd();
+  gamestate.stepBy(1);
   
   var tiles = gamestate.toList();
   if (tiles.length == 1) { return true; }

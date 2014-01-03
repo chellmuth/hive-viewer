@@ -9,6 +9,7 @@ import '../lib/assets.dart';
 import '../lib/parser.dart';
 import '../lib/hex_math.dart';
 import '../lib/gamemodel.dart';
+import '../lib/rules.dart';
 
 var stepCount = 1;
 var camera = new Camera();
@@ -92,10 +93,17 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var initialTranslation = new Point(canvas.width / 2 - HexView.width / 2, canvas.height / 2 - HexView.height / 2);
   var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
   var coordinate = hexAtPoint(hexmap, translatedPoint);
+  
+  List<Move> moves = [];
   for (Tile tile in gamestate.toList()) {
-      tile.highlight = tile.coordinate == coordinate; 
+    if (tile.coordinate == coordinate) {
+      tile.highlight = true;
+      moves.addAll(tile.piece.moves(gamestate));
+    } else {
+      tile.highlight = false;
+    }
   }
-  render(gamestate);
+  render(gamestate, moves: moves);
 }
 
 void setupSGF(String sgf, GameState gamestate) {
@@ -131,7 +139,7 @@ class Camera {
   num offsetX = 0, offsetY = 0;
 }
 
-void render(GameState gamestate) {
+void render(GameState gamestate, { List<Move> moves : null }) {
   CanvasElement canvas = querySelector("#hive_canvas_id");
   canvas.width = 800;
   canvas.height = 600;
@@ -153,6 +161,13 @@ void render(GameState gamestate) {
       tileView.draw(context);
     }
   }
+
+  if (moves == null) { moves = []; }
+  Iterable<MoveView> moveViews = moves.map((move) => new MoveView(move.targetLocation));
+  for (var moveView in moveViews) {
+    moveView.draw(context);
+  }
+  
   context.restore();
 }
 

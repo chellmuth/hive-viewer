@@ -147,6 +147,7 @@ class GameStateTestHelper {
     GameState gamestate = new GameState();
     for (Move move in moves) {
       gamestate.appendMove(move);
+      gamestate.stepToEnd();
     }
     return gamestate;
   }

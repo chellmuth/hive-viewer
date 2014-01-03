@@ -76,7 +76,7 @@ class Piece {
   }
 
   List<Move> moves(GameState gamestate) {
-    return RangedSlideMoveFinder.findMoves(2, this, gamestate);
+    return RangedSlideMoveFinder.findMoves(3, this, gamestate);
   }
 }
 

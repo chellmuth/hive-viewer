@@ -102,7 +102,7 @@ class RangedSlideMoveFinder {
       if (!checkFreedomOfMovementRule(move, gamestate)) { return false; }
 
       gamestate.appendMove(move);
-      gamestate.stepToEnd();
+      gamestate.stepBy(1);
       currentLocation = targetLocation;
     }
     return true;

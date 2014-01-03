@@ -49,6 +49,16 @@ abstract class HexView {
   }
 }
 
+class MoveView extends HexView {
+  Coordinate location;
+  MoveView(this.location);
+
+  int get row => location.row;
+  int get col => location.col;
+  String get fillColor => '#f99';
+  String get strokeColor => '#333';
+}
+
 class TileView extends HexView {
   Tile tile;
   

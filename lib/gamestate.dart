@@ -23,11 +23,18 @@ class GameState {
   }
 
   void appendMove(Move move) {
+    if (moves.length > 0) {
+      moves = moves.getRange(0, _stepCount).toList();
+    }
     moves.add(move);
   }
 
   void stepToEnd() {
     step(moves.length);
+  }
+  
+  void stepBy(num stepBy) {
+    step(_stepCount + stepBy);
   }
 
   void step(num stepCount) {
