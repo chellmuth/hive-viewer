@@ -8,8 +8,8 @@ import 'assets.dart';
 import 'gamemodel.dart';
 
 abstract class HexView {
-  static final num width = 80;
-  static final num height = 90;
+  static final num width = 80 * 2;
+  static final num height = 90 * 2;
   
   static final num pointHeight = .25;
   static final num dotRadius = 2;
@@ -70,18 +70,18 @@ class TileView extends HexView {
   String get strokeColor => tile.highlight ? '#f00' : '#333';
   
   void draw(CanvasRenderingContext2D context) {
-    super.draw(context);
+    //super.draw(context);
 
     var imageRectHeight = HexView.height * (1 - 2 * HexView.pointHeight);
     var imageRect = new Rectangle(xOffset, yOffset + HexView.pointHeight * HexView.height, HexView.width, imageRectHeight);
        
-    ImageElement asset = AssetLibrary.imageForBug(tile.piece.bug);
+    ImageElement asset = AssetLibrary.imageForPiece(tile.piece);
     Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, asset.width, asset.height));
 //    context.strokeStyle = '#0f0';
 //    context.strokeRect(imageRect.left, imageRect.top, imageRect.width, imageRect.height);
 //    context.strokeStyle = '#00f';
 //    context.strokeRect(scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
-    context.drawImageScaled(asset, scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
+    context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);      
 
     var boxSize = 16;
     var dotContainerRect = new Rectangle(xOffset + .8 * HexView.width - boxSize / 2, yOffset + .3 * HexView.height - boxSize / 2, boxSize, boxSize);

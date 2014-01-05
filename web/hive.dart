@@ -42,6 +42,7 @@ void start() {
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
   
   var canvas = querySelector("#hive_canvas_id");
+
   canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
   
   var dragHandler = new DragHandler(canvas);
@@ -141,14 +142,20 @@ class Camera {
 
 void render(GameState gamestate, { List<Move> moves : null }) {
   CanvasElement canvas = querySelector("#hive_canvas_id");
-  canvas.width = 800;
-  canvas.height = 600;
-  
+
   var context = canvas.context2D;
+  
+  context.save();
+  var gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, '#F2E4B1');
+  gradient.addColorStop(1, '#E3C68C');
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.restore();
 
   context.save();
   context.translate(canvas.width / 2 - HexView.width / 2, canvas.height / 2 - HexView.height / 2);
-  context.translate(camera.offsetX, camera.offsetY);
+  context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile)).toList();
   for (TileView tileView in tileViews) {
