@@ -11,7 +11,6 @@ import '../lib/hex_math.dart';
 import '../lib/gamemodel.dart';
 import '../lib/rules.dart';
 
-var stepCount = 1;
 var camera = new Camera();
 
 void main() {
@@ -70,20 +69,19 @@ void start() {
 void handleKeyPress(KeyboardEvent event, GameState gamestate) {
   switch (event.keyCode) {
     case 37: //left
-      stepCount -= 1;
+      gamestate.stepBy(-1);
       break;
     case 38: //up
-      stepCount = 1;
+      gamestate.step(gamestate.moves.length);
       break;
     case 39: //right
-      stepCount += 1;
+      gamestate.stepBy(1);
       break;
     case 40: //down
-      stepCount = gamestate.moves.length;
+      gamestate.step(1);
       break;
     default: return;
   }
-  gamestate.step(stepCount);
   render(gamestate);
 }
 
@@ -108,30 +106,26 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
 }
 
 void setupSGF(String sgf, GameState gamestate) {
-  stepCount = 1;
   var gameEvents = SGF.parseSGF(sgf);
   gamestate.initialize(gameEvents);
-  gamestate.step(stepCount);
+  gamestate.step(1);
   render(gamestate);
 }
 
 void showNextMove(GameState gamestate) {
-  stepCount += 1;
-  gamestate.step(stepCount);
+  gamestate.stepBy(1);
   
   render(gamestate);
 }
 
 void showPreviousMove(GameState gamestate) {
-  stepCount -= 1;
-  gamestate.step(stepCount);
+  gamestate.stepBy(-1);
   
   render(gamestate);
 }
 
 void showFirstMove(GameState gamestate) {
-  stepCount = 1;
-  gamestate.step(stepCount);
+  gamestate.step(1);
   
   render(gamestate);
 }
