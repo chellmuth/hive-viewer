@@ -94,10 +94,9 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var coordinate = hexAtPoint(hexmap, translatedPoint);
   
   List<Move> moves = [];
-  for (Tile tile in gamestate.toList()) {
-    if (tile.coordinate == coordinate) {
-      moves.addAll(tile.piece.moves(gamestate));
-    }
+  Piece clickedPiece = gamestate.pieceAt(coordinate);
+  if (clickedPiece != null) {
+    moves.addAll(clickedPiece.moves(gamestate));
   }
   render(gamestate, moves: moves);
 }

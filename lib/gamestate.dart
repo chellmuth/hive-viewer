@@ -108,9 +108,12 @@ class GameState {
   }
   
   Piece pieceAt(Coordinate location) {
-    var tile = tiles.firstWhere((tile) => tile.coordinate == location, orElse: () => null);
-    if (tile == null) { return null; }
-    return tile.piece;
+    List<Tile> tileStack = tiles.where((tile) => tile.coordinate == location)
+        .toList();
+    tileStack.sort((t1, t2) => t1.height.compareTo(t2.height));
+
+    if (tileStack.isEmpty) { return null; }
+    return tileStack.last.piece;
   }
   
   List<Tile> neighbors(Coordinate location) {
