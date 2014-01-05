@@ -80,11 +80,6 @@ class TileView extends HexView {
     var imageRect = new Rectangle(xOffset, yOffset + HexView.pointHeight * HexView.height, HexView.width, imageRectHeight);
        
     ImageElement asset = AssetLibrary.imageForPiece(tile.piece);
-    Rectangle scaledImageRect = aspectFill(imageRect, new Rectangle(0, 0, asset.width, asset.height));
-//    context.strokeStyle = '#0f0';
-//    context.strokeRect(imageRect.left, imageRect.top, imageRect.width, imageRect.height);
-//    context.strokeStyle = '#00f';
-//    context.strokeRect(scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
     context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);      
 
     var boxSize = 20;
