@@ -164,7 +164,6 @@ void render(GameState gamestate, { List<Move> moves : null }) {
 
     return t1.col.compareTo(t2.col);
   });
-  print(tileViews.map((tileView) => tileView.tile.coordinate));
 
   for (TileView tileView in tileViews) {
     if (!tileView.tile.highlight) {
