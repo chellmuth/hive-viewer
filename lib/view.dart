@@ -3,7 +3,6 @@ library view;
 import 'dart:html';
 import 'dart:math' show PI;
 
-import 'rect.dart';
 import 'assets.dart';
 import 'gamemodel.dart';
 
@@ -67,7 +66,7 @@ class TileView extends HexView {
   int get row => tile.row;
   int get col => tile.col;
   String get fillColor => tile.piece.player == Player.WHITE ? '#595959' : '#FFFFF7';
-  String get strokeColor => tile.highlight ? '#f00' : '#333';
+  String get strokeColor => '#333';
   
   void draw(CanvasRenderingContext2D context) {
     //super.draw(context);

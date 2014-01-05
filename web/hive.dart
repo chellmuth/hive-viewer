@@ -96,10 +96,7 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   List<Move> moves = [];
   for (Tile tile in gamestate.toList()) {
     if (tile.coordinate == coordinate) {
-      tile.highlight = true;
       moves.addAll(tile.piece.moves(gamestate));
-    } else {
-      tile.highlight = false;
     }
   }
   render(gamestate, moves: moves);
@@ -167,9 +164,7 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   });
 
   for (TileView tileView in tileViews) {
-    if (!tileView.tile.highlight) {
       tileView.draw(context);
-    }
   }
 
   if (moves == null) { moves = []; }
@@ -178,12 +173,6 @@ void render(GameState gamestate, { List<Move> moves : null }) {
     moveView.draw(context);
   }
   
-  for (TileView tileView in tileViews) {
-    if (tileView.tile.highlight) {
-      tileView.draw(context);
-    }
-  }
-
   context.restore();
 }
 

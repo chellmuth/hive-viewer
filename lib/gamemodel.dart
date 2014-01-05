@@ -197,8 +197,6 @@ class Tile {
   Piece piece;
   int height;
   
-  bool highlight = false;
-
   Tile(this.row, this.col, this.piece, { this.height: 0 });
   
   bool operator ==(other) {
