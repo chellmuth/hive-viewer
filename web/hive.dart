@@ -143,6 +143,9 @@ class Camera {
 void render(GameState gamestate, { List<Move> moves : null }) {
   CanvasElement canvas = querySelector("#hive_canvas_id");
 
+  DivElement progressBar = querySelector("#progress_bar_indicator");
+  progressBar.style.width = "${ canvas.width / 2 * gamestate.percentComplete - 2}px";
+
   var context = canvas.context2D;
   
   context.save();

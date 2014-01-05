@@ -12,9 +12,6 @@ body {
   background-color: #595959;
   height: 50px;
   width: 100%;
-  -moz-box-shadow:    0px 1px 2px 0px rgba(0,0,0,0.50);
-  -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.50);
-  box-shadow:         0px 1px 2px 0px rgba(0,0,0,0.50);
   position:absolute;
   z-index: 100;
 }
@@ -26,9 +23,9 @@ body {
 }
 
 .vertical-align-helper {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
 }
 
 .logo-name {
@@ -36,4 +33,28 @@ body {
   font-family: Futura; 
   color: #F6F6F6;
   vertical-align: middle;"
+}
+
+.bottom-shadow {
+  -moz-box-shadow:    0px 1px 2px 0px rgba(0,0,0,0.50);
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.50);
+  box-shadow:         0px 1px 2px 0px rgba(0,0,0,0.50);
+}
+
+canvas { 
+  display:block;
+}
+
+.progress-bar {
+  height: 16px;
+  width: 800px;
+  background-color: #595959;
+}
+
+.progress-bar-contents {
+  position: relative;
+  top: 1px;
+  left: 1px;
+  height: 14px;
+  background-color: #FF797A;
 }

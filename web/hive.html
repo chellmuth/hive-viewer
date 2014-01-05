@@ -7,14 +7,19 @@
     <link rel="stylesheet" href="hive.css">
   </head>
   <body>
-    <div class="header">
+    <div class="header bottom-shadow">
     <span class="vertical-align-helper"></span>
         <img src="images/hive-logo.png" style="vertical-align:middle;" />
         <span class="logo-name">HIVE</span>
         <div class="horizontal-line"></div>
     </div>
     <input type="file" id="file_upload_id">
-    <canvas id="hive_canvas_id" width=1600 height=1200 style="width:800px; height:600px;"></canvas>
+    <div>
+      <canvas id="hive_canvas_id" width=1600 height=1200 style="width:800px; height:600px;"></canvas>
+      <div class="progress-bar bottom-shadow">
+        <div id="progress_bar_indicator" class="progress-bar-contents"></div>
+      </div>
+    </div>
 
     <button id="button_first_id" disabled>⇤</button>
     <button id="button_previous_id" disabled>←</button>

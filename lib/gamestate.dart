@@ -121,4 +121,6 @@ class GameState {
   List<Tile> toList() {
     return tiles;
   }
+  
+  num get percentComplete => _stepCount / moves.length;
 }
