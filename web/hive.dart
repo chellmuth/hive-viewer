@@ -152,27 +152,28 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile)).toList();
-  tileViews.sort((t1, t2) {
+  if (moves == null) { moves = []; }
+  List<MoveView> moveViews = moves.map((move) => new MoveView(move.targetLocation)).toList();
+
+  List<HexView> hexViews = [];
+  hexViews.addAll(tileViews);
+  hexViews.addAll(moveViews);
+
+  hexViews.sort((t1, t2) {
     var rowCompare = t1.row.compareTo(t2.row);
     if (rowCompare != 0) { return rowCompare; }
 
-    var heightCompare = t1.tile.height.compareTo(t2.tile.height);
+    var heightCompare = t1.stackHeight.compareTo(t2.stackHeight);
     if (heightCompare != 0) { return heightCompare; }
 
-    var colCompare =  t1.col.compareTo(t2.col);
+    var colCompare = t1.col.compareTo(t2.col);
     return colCompare;
   });
 
-  for (TileView tileView in tileViews) {
-      tileView.draw(context);
+  for (HexView hexView in hexViews) {
+      hexView.draw(context);
   }
 
-  if (moves == null) { moves = []; }
-  Iterable<MoveView> moveViews = moves.map((move) => new MoveView(move.targetLocation));
-  for (var moveView in moveViews) {
-    moveView.draw(context);
-  }
-  
   context.restore();
 }
 

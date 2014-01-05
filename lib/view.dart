@@ -14,6 +14,7 @@ abstract class HexView {
   
   int get row;
   int get col;
+  int get stackHeight => 1;
   String get strokeColor;
   String get fillColor;
   
@@ -65,6 +66,7 @@ class TileView extends HexView {
 
   int get row => tile.row;
   int get col => tile.col;
+  int get stackHeight => tile.height;
   String get fillColor => tile.piece.player == Player.WHITE ? '#595959' : '#FFFFF7';
   String get strokeColor => '#333';
   
