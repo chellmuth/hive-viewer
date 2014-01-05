@@ -12,7 +12,6 @@ abstract class HexView {
   static final num height = 90 * 2;
   
   static final num pointHeight = .25;
-  static final num dotRadius = 2;
   
   int get row;
   int get col;
@@ -61,12 +60,13 @@ class MoveView extends HexView {
 
 class TileView extends HexView {
   Tile tile;
+  static final num dotRadius = 3;
   
   TileView(this.tile);
 
   int get row => tile.row;
   int get col => tile.col;
-  String get fillColor => tile.piece.player == Player.WHITE ? '#fff' : '#888';
+  String get fillColor => tile.piece.player == Player.WHITE ? '#595959' : '#FFFFF7';
   String get strokeColor => tile.highlight ? '#f00' : '#333';
   
   void draw(CanvasRenderingContext2D context) {
@@ -83,8 +83,8 @@ class TileView extends HexView {
 //    context.strokeRect(scaledImageRect.left, scaledImageRect.top, scaledImageRect.width, scaledImageRect.height);
     context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);      
 
-    var boxSize = 16;
-    var dotContainerRect = new Rectangle(xOffset + .8 * HexView.width - boxSize / 2, yOffset + .3 * HexView.height - boxSize / 2, boxSize, boxSize);
+    var boxSize = 20;
+    var dotContainerRect = new Rectangle(xOffset + .85 * HexView.width - boxSize / 2, yOffset + .3 * HexView.height - boxSize / 2, boxSize, boxSize);
 
 //    context.fillStyle = '#00f';
 //    context.fillRect(dotContainerRect.left, dotContainerRect.top, dotContainerRect.width, dotContainerRect.height);
@@ -118,7 +118,7 @@ class TileView extends HexView {
 
     context.fillStyle = fillColor;
     context.beginPath();
-    context.arc(boundingRect.left + xCenter * boundingRect.width, boundingRect.top + yCenter * boundingRect.height, HexView.dotRadius, 0, PI * 2, true);
+    context.arc(boundingRect.left + xCenter * boundingRect.width, boundingRect.top + yCenter * boundingRect.height, TileView.dotRadius, 0, PI * 2, true);
     context.closePath();
     context.fill();
 
