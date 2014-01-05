@@ -91,7 +91,7 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var hexmap = new Hexmap(80, 90, .25);
 
   var canvas = querySelector("#hive_canvas_id");
-  var initialTranslation = new Point(canvas.width / 2 - HexView.width / 2, canvas.height / 2 - HexView.height / 2);
+  var initialTranslation = new Point(canvas.width / 4 - HexView.width / 4, canvas.height / 4 - HexView.height / 4);
   var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
   var coordinate = hexAtPoint(hexmap, translatedPoint);
   
