@@ -158,6 +158,14 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile)).toList();
+  tileViews.sort((t1, t2) {
+    var rowCompare = t1.row.compareTo(t2.row);
+    if (rowCompare != 0) { return rowCompare; }
+
+    return t1.col.compareTo(t2.col);
+  });
+  print(tileViews.map((tileView) => tileView.tile.coordinate));
+
   for (TileView tileView in tileViews) {
     if (!tileView.tile.highlight) {
       tileView.draw(context);
