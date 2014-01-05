@@ -195,10 +195,11 @@ class Coordinate {
 class Tile {
   num row, col;
   Piece piece;
+  int height;
   
   bool highlight = false;
 
-  Tile(this.row, this.col, this.piece);
+  Tile(this.row, this.col, this.piece, { this.height: 0 });
   
   bool operator ==(other) {
     if (other is !Tile) { return false; }

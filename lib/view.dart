@@ -72,6 +72,10 @@ class TileView extends HexView {
   void draw(CanvasRenderingContext2D context) {
     //super.draw(context);
 
+    var xStackOffset = 6, yStackOffset = 10;
+    var xOffset = this.xOffset + (tile.height - 1) * xStackOffset;
+    var yOffset = this.yOffset - (tile.height - 1) * yStackOffset;
+
     var imageRectHeight = HexView.height * (1 - 2 * HexView.pointHeight);
     var imageRect = new Rectangle(xOffset, yOffset + HexView.pointHeight * HexView.height, HexView.width, imageRectHeight);
        

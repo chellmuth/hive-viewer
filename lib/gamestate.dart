@@ -7,6 +7,7 @@ class GameState {
   int _stepCount = 1;
   List<Tile> tiles = [];
   List<Move> moves = [];
+  _PieceStacks pieceStacks;
 
   void initialize(List<GameEvent> events) {
     moves = _mapGameEvents(events); 
@@ -43,23 +44,28 @@ class GameState {
 
     _stepCount = stepCount;
     tiles = [];
+    pieceStacks = new _PieceStacks();
 
     var pieceLocations = new Map<Piece, Coordinate>();
 
     for (Move move in moves.take(stepCount)) {
       if (move.currentLocation == null) {
-        tiles.add(new Tile(move.targetLocation.row, move.targetLocation.col, move.piece));
+        pieceStacks.pushPiece(move.piece, move.targetLocation);
+        tiles.add(new Tile(move.targetLocation.row, move.targetLocation.col, move.piece, height: 1));
         pieceLocations[move.piece] = move.targetLocation;
         continue;
       }
-  
+
       if (pieceLocations.containsKey(move.piece)) {
         Coordinate currentLocation = move.currentLocation;
+        pieceStacks.popPiece(move.piece, currentLocation);
         tiles.remove(new Tile(currentLocation.row, currentLocation.col, move.piece));
       }
       Coordinate targetLocation = move.targetLocation;
       pieceLocations[move.piece] = targetLocation;
-      tiles.add(new Tile(targetLocation.row, targetLocation.col, move.piece));
+      pieceStacks.pushPiece(move.piece, move.targetLocation);
+      var pieceHeight = pieceStacks.pieceHeight(move.piece, move.targetLocation);
+      tiles.add(new Tile(targetLocation.row, targetLocation.col, move.piece, height: pieceHeight));
     }
   }
   
@@ -81,8 +87,6 @@ class GameState {
 
       Coordinate relativeLocation = pieceLocations[event.relativePiece];
       if (relativeLocation == null) {
-        print (pieceLocations);
-        print (event.relativePiece);
         throw new Exception("Can't find relative piece");
       }
       var targetLocation = relativeLocation.applyDirection(event.direction);
@@ -124,4 +128,24 @@ class GameState {
   }
   
   num get percentComplete => _stepCount / moves.length;
+}
+
+class _PieceStacks {
+  Map<Coordinate, List<Piece>> stacks = {};
+
+  void pushPiece(Piece piece, Coordinate location) {
+    if (stacks.containsKey(location)) {
+      stacks[location].add(piece);
+    } else {
+      stacks[location] = [ piece ];
+    }
+  }
+
+  void popPiece(Piece piece, Coordinate location) {
+    stacks[location].removeLast();
+  }
+
+  int pieceHeight(Piece piece, Coordinate location) {
+    return stacks[location].length;
+  }
 }

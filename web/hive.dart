@@ -159,7 +159,11 @@ void render(GameState gamestate, { List<Move> moves : null }) {
     var rowCompare = t1.row.compareTo(t2.row);
     if (rowCompare != 0) { return rowCompare; }
 
-    return t1.col.compareTo(t2.col);
+    var heightCompare = t1.tile.height.compareTo(t2.tile.height);
+    if (heightCompare != 0) { return heightCompare; }
+
+    var colCompare =  t1.col.compareTo(t2.col);
+    return colCompare;
   });
 
   for (TileView tileView in tileViews) {
