@@ -19,6 +19,12 @@ body {
   z-index: 100;
 }
 
+.horizontal-line {
+  margin-top: -2px;
+  height: 1px;
+  background-color: #A4A4A4;
+}
+
 .vertical-align-helper {
     display: inline-block;
     height: 100%;
