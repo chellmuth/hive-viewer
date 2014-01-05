@@ -5,5 +5,24 @@ body {
   font-size: 14px;
   font-weight: normal;
   line-height: 1.2em;
-  margin: 15px;
+  margin: 0px;
+}
+
+.header {
+  background-color: #595959;
+  height: 50px;
+  width: 100%;
+}
+
+.vertical-align-helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.logo-name {
+  font-size: 28px;
+  font-family: Futura; 
+  color: #F6F6F6;
+  vertical-align: middle;"
 }
