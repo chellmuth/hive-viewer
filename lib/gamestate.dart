@@ -38,10 +38,11 @@ class GameState {
   }
 
   void step(num stepCount) {
+    if (stepCount < 1) { stepCount = 1; }
+    if (stepCount > moves.length) { stepCount = moves.length; }
+
     _stepCount = stepCount;
     tiles = [];
-
-    if (stepCount < 1) { stepCount = 1; }
 
     var pieceLocations = new Map<Piece, Coordinate>();
 
