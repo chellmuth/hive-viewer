@@ -102,8 +102,10 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
 }
 
 void setupSGF(String sgf, GameState gamestate) {
-  var gameEvents = SGF.parseSGF(sgf);
-  gamestate.initialize(gameEvents);
+  ParsedGame parsedGame = SGF.parseSGF(sgf);
+  print(parsedGame.player1);
+  print(parsedGame.player2);
+  gamestate.initialize(parsedGame.gameEvents);
   gamestate.step(1);
   render(gamestate);
 }

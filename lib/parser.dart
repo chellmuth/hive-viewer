@@ -1,47 +1,61 @@
 library parser;
 
-import 'dart:math';
 import 'dart:async';
 import 'dart:html';
 import 'dart:convert';
 
 import 'gamemodel.dart';
 
-class SGF {
-  static final Random random = new Random();
+class ParsedGame {
+  String player1;
+  String player2;
+  List<GameEvent> gameEvents = [];
+}
 
+class SGF {
   static Future downloadSGF() {
     var path = 'sgf/test1.sgf';
     return HttpRequest.getString(path); 
   }
   
-  static List<GameEvent> parseSGF(String SGFString) {
-    var gameEvents = [];
+  static ParsedGame parseSGF(String SGFString) {
+    var game = new ParsedGame();
     var lineSplitter = new LineSplitter();
     for (String line in lineSplitter.convert(SGFString)) {
-      _parseLine(line, gameEvents);
+      _parseLine(line, game);
     }
 
-    return gameEvents;
+    return game;
   }
   
-  static _parseLine(String line, List<GameEvent> gameEvents) {
-    if (!line.startsWith(';')) {
+  static _parseLine(String line, ParsedGame game) {
+    var playerNameExp = new RegExp(r'P([01])\[id "([^"]+)"\]');
+    var playerNameMatch = playerNameExp.firstMatch(line);
+    if (playerNameMatch != null) {
+      var playerNumber = int.parse(playerNameMatch.group(1));
+      var playerName = playerNameMatch.group(2);
+      
+      if (playerNumber == 0) {
+        game.player1 = playerName;
+      } else if (playerNumber == 1) {
+        game.player2 = playerName;
+      } else {
+        throw new Exception("Unknown player number");
+      }
       return;
     }
+
     var playerMoveExp = new RegExp(r"; P(\d)\[\d+ p?dropb ([wb])([AaBbGgQqSs])([123])? \w+ \d+ ([^\]]+)]");
     var match = playerMoveExp.firstMatch(line);
     if (match != null) {
-      print(line);
-      gameEvents.add(_parseGameEvent(match));
+      game.gameEvents.add(_parseGameEvent(match));
       return;
     }
 
     var computerMoveExp = new RegExp(r"; P(\d)\[\d+ move ([WB]) [wb]?([ABGQS])([123])? \w+ \d+ ([^\]]+)\]");
     var computerMatch = computerMoveExp.firstMatch(line);
     if (computerMatch != null) {
-      print(line);
-      gameEvents.add(_parseGameEvent(computerMatch));
+      game.gameEvents.add(_parseGameEvent(computerMatch));
       return;
     }
   }
