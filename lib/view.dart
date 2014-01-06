@@ -54,7 +54,7 @@ class MoveView extends HexView {
 
   int get row => location.row;
   int get col => location.col;
-  String get fillColor => '#f99';
+  String get fillColor => 'rgba(255, 153, 154, 0.8)';
   String get strokeColor => '#333';
 }
 
