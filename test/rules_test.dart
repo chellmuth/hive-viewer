@@ -45,7 +45,7 @@ class TestRules {
       gamestate.step(2);
 
       Move move = new Move(piece1, new Coordinate(0, 0), new Coordinate(0, 3));
-      expect(checkOneHiveRule(move, gamestate), isNot(isTrue));
+      expect(checkOneHiveRule(move, gamestate), isFalse);
     });
 
     test('moving the piece causes a temporary hive split', () {
@@ -59,7 +59,19 @@ class TestRules {
       gamestate.stepToEnd();
       Piece piece = _bA_;
       Move move = new Move(piece, new Coordinate(1, 1), new Coordinate(1, 2));
-      expect(checkOneHiveRule(move, gamestate), isNot(isTrue));
+      expect(checkOneHiveRule(move, gamestate), isFalse);
+    });
+
+    test('stacked pieces are part of the hive', () {
+      var _bB_ = new Piece(Player.BLACK, Bug.BEETLE, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG' ],
+          [ '  ', _bB_ ]
+      ]);
+      gamestate.stepToEnd();
+      Piece piece = _bB_;
+      Move move = new Move(piece, new Coordinate(1, 1), new Coordinate(0, 1));
+      expect(checkOneHiveRule(move, gamestate), isTrue);
     });
   }
 
@@ -89,7 +101,7 @@ class TestRules {
       gamestate.stepToEnd();
       Piece piece = _bA_;
       Move move = new Move(piece, new Coordinate(1, 2), new Coordinate(1, 1));
-      expect(checkFreedomOfMovementRule(move, gamestate), isNot(isTrue));
+      expect(checkFreedomOfMovementRule(move, gamestate), isFalse);
     });
   }
 

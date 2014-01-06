@@ -130,6 +130,13 @@ class GameState {
     return pieceStacks.stackAt(location);
   }
   
+  // used to test One Hive Rule
+  void removeTileForPiece(Piece piece) {
+    var tile = tiles.firstWhere((tile) => piece == tile.piece);
+    tiles.removeWhere((target) => target.piece == tile.piece);
+    pieceStacks.removePiece(piece, tile.coordinate);
+  }
+  
   List<Tile> toList() {
     return tiles;
   }
@@ -162,5 +169,9 @@ class _PieceStacks {
     } else {
       return [];
     }
+  }
+  
+  void removePiece(Piece piece, Coordinate location) {
+    _stacks[location].remove(piece);
   }
 }

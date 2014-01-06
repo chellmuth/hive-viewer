@@ -36,6 +36,9 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
   
   void addNeighbors(Tile tile) {
     checkedPieces.add(tile.piece);
+    for (Piece stackMate in gamestate.stackAt(tile.coordinate)) {
+      checkedPieces.add(stackMate);
+    }
     for (Tile neighbor in gamestate.neighbors(tile.coordinate)) {
       if (!checkedPieces.contains(neighbor.piece)) {
         checkedPieces.add(neighbor.piece);
@@ -49,7 +52,7 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
 
   checkedPieces.clear();
 
-  tiles.removeWhere((tile) => tile.piece == move.piece);
+  gamestate.removeTileForPiece(move.piece);
   addNeighbors(tiles.first);
 
   return checkedPieces.length == tiles.length;
