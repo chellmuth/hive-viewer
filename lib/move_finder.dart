@@ -27,6 +27,22 @@ bool _checkSlideRulesOnTransition(List<Coordinate> transition, GameState gamesta
   return true;
 }
 
+class ClimbHiveMoveFinder {
+  static List<Move> findMoves(Piece piece, GameState gamestate) {
+    List<Move> moves = [];
+    List<Tile> tiles = gamestate.toList();
+    var tile = tiles.firstWhere((tile) => tile.piece == piece);
+    if (tile.height > 1) { return []; }
+    
+    for (Tile neighbor in gamestate.neighbors(tile.coordinate)) {
+      Move move = new Move(piece, tile.coordinate, neighbor.coordinate);
+      if (checkOneHiveRule(move, gamestate)) {
+        moves.add(move);
+      }
+    }
+    return moves;
+  }
+}
 
 class JumpMoveFinder {
   static List<Move> findMoves(Piece piece, GameState gamestate) {
