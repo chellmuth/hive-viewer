@@ -44,7 +44,6 @@ abstract class HexView {
     context.closePath();
     context.fill();
     context.stroke();
-    
   }
 }
 
@@ -148,22 +147,30 @@ class CoveredPieceView {
       case Bug.SPIDER: return 'S';
     }
   }
+  
+  String get color {
+    switch (piece.bug) { 
+      case Bug.ANT: return '#6DA9EE';
+      case Bug.BEETLE: return '#E56CFE';
+      case Bug.GRASSHOPPER: return '#9ADA54';
+      case Bug.QUEEN: return '#F8E71C';
+      case Bug.SPIDER: return '#CA9668';
+    }
+  }
+
 
   void draw(CanvasRenderingContext2D context, Rectangle bounds) {
     context.save();
-    context.fillStyle = piece.player == Player.WHITE ? '#FFFFF7' : '#595959';
-    context.strokeStyle = '#000';
-    context.lineWidth = 2.5;
+    context.fillStyle = color;
     
     context.beginPath();
     context.arc(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, bounds.width / 2, 0, PI * 2, true);
     context.closePath();
     context.fill();
-    context.stroke();
     
     var fontSize = 14;
     context.font = '${fontSize}pt Futura';
-    context.fillStyle = piece.player == Player.WHITE ? '#595959' : '#FFFFF7';
+    context.fillStyle = piece.player == Player.WHITE ? '#FFFFF7' : '#595959';
     var metrics = context.measureText(letter);
     context.fillText(letter, bounds.left + bounds.width / 2 - metrics.width / 2, bounds.top + bounds.height / 2 + fontSize / 2);
     context.restore();
