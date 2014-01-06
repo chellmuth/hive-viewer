@@ -126,6 +126,10 @@ class GameState {
     return neighbors;
   }
   
+  List<Piece>stackAt(Coordinate location) {
+    return pieceStacks.stackAt(location);
+  }
+  
   List<Tile> toList() {
     return tiles;
   }
@@ -134,21 +138,29 @@ class GameState {
 }
 
 class _PieceStacks {
-  Map<Coordinate, List<Piece>> stacks = {};
+  Map<Coordinate, List<Piece>> _stacks = {};
 
   void pushPiece(Piece piece, Coordinate location) {
-    if (stacks.containsKey(location)) {
-      stacks[location].add(piece);
+    if (_stacks.containsKey(location)) {
+      _stacks[location].add(piece);
     } else {
-      stacks[location] = [ piece ];
+      _stacks[location] = [ piece ];
     }
   }
 
   void popPiece(Piece piece, Coordinate location) {
-    stacks[location].removeLast();
+    _stacks[location].removeLast();
   }
 
   int pieceHeight(Piece piece, Coordinate location) {
-    return stacks[location].length;
+    return _stacks[location].length;
+  }
+  
+  List<Piece> stackAt(Coordinate location) {
+    if (_stacks.containsKey(location)) {
+      return _stacks[location];
+    } else {
+      return [];
+    }
   }
 }

@@ -10,6 +10,7 @@ class TestGameState {
       group('Neighbors:', _neighbors);
       group('Piece At:', _pieceAt);
       group('Is Location Empty:', _isLocationEmpty);
+      group('Stack at:', _stackAt);
     });
   }
 
@@ -88,7 +89,7 @@ class TestGameState {
       ]);
       gamestate.stepToEnd();
       expect(gamestate.toList().length, equals(2));
-    });  
+    });
   }
 
   static void _locate() {
@@ -103,12 +104,12 @@ class TestGameState {
       gamestate.stepToEnd();
       gamestate.appendMove(new Move(piece1, new Coordinate(0, 0), new Coordinate(1, 1)));
       gamestate.stepToEnd();
-      
+
       expect(gamestate.locate(piece1), equals(new Coordinate(1, 1)));
       expect(gamestate.locate(piece2), equals(new Coordinate(0, 1)));
     });
   }
-  
+
   static void _neighbors() {
     test('basic', () {
       var _bG_ = new Piece(Player.BLACK, Bug.GRASSHOPPER, 1);
@@ -124,7 +125,7 @@ class TestGameState {
       expect(gamestate.neighbors(new Coordinate(2, 2)).length, equals(6));
     });
   }
-  
+
   static void _pieceAt() {
     test('piece exists', () {
       Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
@@ -135,7 +136,7 @@ class TestGameState {
         new GameEvent(piece2, piece1, Direction.RIGHT)
       ]);
       gamestate.stepToEnd();
-      
+
       expect(gamestate.pieceAt(new Coordinate(0, 0)), equals(piece1));
       expect(gamestate.pieceAt(new Coordinate(0, 1)), equals(piece2));
     });
@@ -147,11 +148,11 @@ class TestGameState {
         new GameEvent(piece, null, null)
       ]);
       gamestate.stepToEnd();
-      
+
       expect(gamestate.pieceAt(new Coordinate(1, 0)), isNull);
     });
   }
-  
+
   static void _isLocationEmpty() {
     test('location not empty', () {
       Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
@@ -162,7 +163,7 @@ class TestGameState {
         new GameEvent(piece2, piece1, Direction.RIGHT)
       ]);
       gamestate.stepToEnd();
-      
+
       expect(gamestate.isLocationEmpty(new Coordinate(0, 0)), isNot(isTrue));
       expect(gamestate.isLocationEmpty(new Coordinate(0, 1)), isNot(isTrue));
     });
@@ -174,9 +175,26 @@ class TestGameState {
         new GameEvent(piece, null, null)
       ]);
       gamestate.stepToEnd();
-      
+
       expect(gamestate.isLocationEmpty(new Coordinate(1, 0)), isTrue);
     });
   }
 
+  static void _stackAt() {
+    test('basic', () {
+      Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
+      Piece piece2 = new Piece(Player.BLACK, Bug.ANT, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece1, null, null),
+        new GameEvent(piece2, piece1, Direction.RIGHT)
+      ]);
+      gamestate.stepToEnd();
+
+      expect(gamestate.stackAt(new Coordinate(0, 0)), equals([piece1]));
+      gamestate.appendMove(new Move(piece1, new Coordinate(0, 0), new Coordinate(0, 1)));
+      gamestate.stepToEnd();
+      expect(gamestate.stackAt(new Coordinate(0, 1)), equals([piece2, piece1]));
+    });
+  }
 }
