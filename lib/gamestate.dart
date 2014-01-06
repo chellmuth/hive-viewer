@@ -126,10 +126,17 @@ class GameState {
     return neighbors;
   }
   
-  List<Piece>stackAt(Coordinate location) {
+  List<Piece> stackAt(Coordinate location) {
     return pieceStacks.stackAt(location);
   }
-  
+
+  List<Piece> piecesCoveredByTile(Tile tile) {
+    List<Piece> stack = pieceStacks.stackAt(tile.coordinate);
+    if (stack.isEmpty) { return []; }
+    if (stack.last == tile.piece) { return stack.sublist(0, stack.length -1); }
+    return []; 
+  }
+
   // used to test One Hive Rule
   void removeTileForPiece(Piece piece) {
     var tile = tiles.firstWhere((tile) => piece == tile.piece);

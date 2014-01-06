@@ -150,7 +150,7 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   context.translate(canvas.width / 2 - HexView.width / 2, canvas.height / 2 - HexView.height / 2);
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
-  List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile)).toList();
+  List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile, gamestate.piecesCoveredByTile(tile))).toList();
   if (moves == null) { moves = []; }
   List<MoveView> moveViews = moves.map((move) => new MoveView(move.targetLocation)).toList();
 
