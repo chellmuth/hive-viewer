@@ -12,7 +12,9 @@ class Beetle extends Piece {
   Beetle._internal(player, bugCount) : super._internal(player, Bug.BEETLE, bugCount);
 
   List<Move> moves(GameState gamestate) {
-    return RangedSlideMoveFinder.findMoves(1, this, gamestate);
+    var moves = RangedSlideMoveFinder.findMoves(1, this, gamestate);
+    moves.addAll(ClimbHiveMoveFinder.findMoves(this, gamestate));
+    return moves;
   }
 }
 
