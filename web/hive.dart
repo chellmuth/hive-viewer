@@ -42,7 +42,6 @@ void start() {
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
 
   var canvas = querySelector("#hive_canvas_id");
-
   canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
 
   var dragHandler = new DragHandler(canvas);
@@ -57,6 +56,10 @@ void start() {
   dragHandler.onDrag.listen(adjustCamera);
 
   window.onKeyDown.listen((event) => handleKeyPress(event, gamestate));
+  window.onResize.listen((event) {
+    layoutCanvas();
+    render(gamestate);
+  });
 
   SGF.downloadSGF().then((sgf) {
     setupSGF(sgf, gamestate);
