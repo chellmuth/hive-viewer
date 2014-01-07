@@ -11,6 +11,7 @@ class TestGameState {
       group('Piece At:', _pieceAt);
       group('Is Location Empty:', _isLocationEmpty);
       group('Stack at:', _stackAt);
+      group('Bench Pieces:', _benchPieces);
     });
   }
 
@@ -195,6 +196,38 @@ class TestGameState {
       gamestate.appendMove(new Move(piece1, new Coordinate(0, 0), new Coordinate(0, 1)));
       gamestate.stepToEnd();
       expect(gamestate.stackAt(new Coordinate(0, 1)), equals([piece2, piece1]));
+    });
+  }
+
+  static void _benchPieces() {
+    test('initially full', () {
+      GameState gamestate = new GameState();
+      var bench = gamestate.benchPieces(Player.WHITE);
+
+      expect(bench[Bug.ANT], equals(3));
+      expect(bench[Bug.BEETLE], equals(2));
+      expect(bench[Bug.GRASSHOPPER], equals(3));
+      expect(bench[Bug.QUEEN], equals(1));
+      expect(bench[Bug.SPIDER], equals(2));
+    });
+
+    test('bench count decreases as tiles are played', () {
+      Piece piece1 = new Piece(Player.WHITE, Bug.ANT, 1);
+      Piece piece2 = new Piece(Player.WHITE, Bug.BEETLE, 1);
+      GameState gamestate = new GameState();
+      gamestate.initialize([
+        new GameEvent(piece1, null, null),
+        new GameEvent(piece2, piece1, Direction.RIGHT),
+        new GameEvent(piece1, piece2, Direction.RIGHT) // moving does not decrease bench count
+      ]);
+      gamestate.stepToEnd();
+
+      var bench = gamestate.benchPieces(Player.WHITE);
+      expect(bench[Bug.ANT], equals(2));
+      expect(bench[Bug.BEETLE], equals(1));
+      expect(bench[Bug.GRASSHOPPER], equals(3));
+      expect(bench[Bug.QUEEN], equals(1));
+      expect(bench[Bug.SPIDER], equals(2));
     });
   }
 }

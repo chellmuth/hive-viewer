@@ -10,9 +10,9 @@ class GameState {
   _PieceStacks pieceStacks;
 
   void initialize(List<GameEvent> events) {
-    moves = _mapGameEvents(events); 
+    moves = _mapGameEvents(events);
   }
-  
+
   GameState copy() {
     GameState copy = new GameState();
     var movesCopy = [];
@@ -33,7 +33,7 @@ class GameState {
   void stepToEnd() {
     step(moves.length);
   }
-  
+
   void stepBy(num stepBy) {
     step(_stepCount + stepBy);
   }
@@ -68,7 +68,7 @@ class GameState {
       tiles.add(new Tile(targetLocation.row, targetLocation.col, move.piece, height: pieceHeight));
     }
   }
-  
+
   List<Move> _mapGameEvents(List<GameEvent> gameEvents) {
     var moves = new List<Move>();
     var pieceLocations = new Map<Piece, Coordinate>();
@@ -91,22 +91,22 @@ class GameState {
       }
       var targetLocation = relativeLocation.applyDirection(event.direction);
       pieceLocations[event.piece] = targetLocation;
-      
+
       moves.add(new Move(event.piece, currentLocation, targetLocation));
     }
 
     return moves;
   }
-  
+
   Coordinate locate(Piece piece) {
     var tile = tiles.firstWhere((tile) => tile.piece == piece);
     return tile.coordinate;
   }
-  
+
   bool isLocationEmpty(Coordinate location) {
     return pieceAt(location) == null;
   }
-  
+
   Piece pieceAt(Coordinate location) {
     List<Tile> tileStack = tiles.where((tile) => tile.coordinate == location)
         .toList();
@@ -115,7 +115,7 @@ class GameState {
     if (tileStack.isEmpty) { return null; }
     return tileStack.last.piece;
   }
-  
+
   List<Tile> neighbors(Coordinate location) {
     var neighbors = [];
     for (Tile possibleNeighbor in tiles) {
@@ -125,7 +125,7 @@ class GameState {
     }
     return neighbors;
   }
-  
+
   List<Piece> stackAt(Coordinate location) {
     return pieceStacks.stackAt(location);
   }
@@ -134,7 +134,7 @@ class GameState {
     List<Piece> stack = pieceStacks.stackAt(tile.coordinate);
     if (stack.isEmpty) { return []; }
     if (stack.last == tile.piece) { return stack.sublist(0, stack.length -1); }
-    return []; 
+    return [];
   }
 
   // used to test One Hive Rule
@@ -143,11 +143,28 @@ class GameState {
     tiles.removeWhere((target) => target.piece == tile.piece);
     pieceStacks.removePiece(piece, tile.coordinate);
   }
-  
+
   List<Tile> toList() {
     return tiles;
   }
-  
+
+  Map<Bug, int> benchPieces(Player player) {
+    var bench = new Map<Bug, int>();
+    bench[Bug.ANT] = 3;
+    bench[Bug.BEETLE] = 2;
+    bench[Bug.GRASSHOPPER] = 3;
+    bench[Bug.QUEEN] = 1;
+    bench[Bug.SPIDER] = 2;
+
+    for (Tile tile in tiles) {
+      if (tile.piece.player == player) {
+        bench[tile.piece.bug] -= 1;
+      }
+    }
+
+    return bench;
+  }
+
   num get percentComplete => _stepCount / moves.length;
 }
 
@@ -169,7 +186,7 @@ class _PieceStacks {
   int pieceHeight(Piece piece, Coordinate location) {
     return _stacks[location].length;
   }
-  
+
   List<Piece> stackAt(Coordinate location) {
     if (_stacks.containsKey(location)) {
       return _stacks[location];
@@ -177,7 +194,7 @@ class _PieceStacks {
       return [];
     }
   }
-  
+
   void removePiece(Piece piece, Coordinate location) {
     _stacks[location].remove(piece);
   }
