@@ -137,7 +137,7 @@ class Camera {
 }
 
 void layoutCanvas() {
-  DivElement header = querySelector('#header_id');
+  DivElement header = querySelector('#header-id');
   DivElement progressBar = querySelector('#progress-bar-id');
 
   CanvasElement canvas = querySelector("#hive-canvas-id");
