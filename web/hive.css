@@ -44,7 +44,7 @@ canvas {
   display:block;
 }
 
-#progress_bar_id {
+#progress-bar-id {
   height: 16px;
   background-color: #595959;
 }

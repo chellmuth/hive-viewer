@@ -22,7 +22,7 @@ void start() {
   layoutCanvas();
   var gamestate = new GameState();
 
-  FileUploadInputElement fileUpload = querySelector("#file_upload_id");
+  FileUploadInputElement fileUpload = querySelector("#file-upload-id");
   fileUpload.onChange.listen((_) {
     var files = fileUpload.files;
     if (files.isEmpty) { return; }
@@ -32,16 +32,16 @@ void start() {
         ..onLoadEnd.listen((_) => setupSGF(fileReader.result, gamestate));
   });
 
-  var nextButton = querySelector("#button_next_id");
+  var nextButton = querySelector("#button-next-id");
   nextButton.onClick.listen((_) => showNextMove(gamestate));
 
-  var previousButton = querySelector("#button_previous_id");
+  var previousButton = querySelector("#button-previous-id");
   previousButton.onClick.listen((_) => showPreviousMove(gamestate));
 
-  var firstButton = querySelector("#button_first_id");
+  var firstButton = querySelector("#button-first-id");
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
 
-  var canvas = querySelector("#hive_canvas_id");
+  var canvas = querySelector("#hive-canvas-id");
   canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
 
   var dragHandler = new DragHandler(canvas);
@@ -92,7 +92,7 @@ void handleKeyPress(KeyboardEvent event, GameState gamestate) {
 void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var hexmap = new Hexmap(80, 90, .25);
 
-  var canvas = querySelector("#hive_canvas_id");
+  var canvas = querySelector("#hive-canvas-id");
   var initialTranslation = new Point(canvas.width / 4 - HexView.width / 4, canvas.height / 4 - HexView.height / 4);
   var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
   var coordinate = hexAtPoint(hexmap, translatedPoint);
@@ -138,9 +138,9 @@ class Camera {
 
 void layoutCanvas() {
   DivElement header = querySelector('#header_id');
-  DivElement progressBar = querySelector('#progress_bar_id');
+  DivElement progressBar = querySelector('#progress-bar-id');
 
-  CanvasElement canvas = querySelector("#hive_canvas_id");
+  CanvasElement canvas = querySelector("#hive-canvas-id");
   var width = window.innerWidth;
   var height = window.innerHeight - header.clientHeight - progressBar.clientHeight;
 
@@ -151,9 +151,9 @@ void layoutCanvas() {
 }
 
 void render(GameState gamestate, { List<Move> moves : null }) {
-  CanvasElement canvas = querySelector("#hive_canvas_id");
+  CanvasElement canvas = querySelector("#hive-canvas-id");
 
-  DivElement progressBar = querySelector("#progress_bar_indicator");
+  DivElement progressBar = querySelector("#progress-bar-indicator-id");
   progressBar.style.width = "${ canvas.width / 2 * gamestate.percentComplete - 2}px";
 
   var context = canvas.context2D;
