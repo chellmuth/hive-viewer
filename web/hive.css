@@ -8,6 +8,14 @@ body {
   margin: 0px;
 }
 
+a {
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 #header-id {
   background-color: #595959;
   height: 50px;

@@ -41,6 +41,11 @@ void start() {
   var firstButton = querySelector("#button-first-id");
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
 
+  AnchorElement uploadLink = querySelector('#upload-anchor-id');
+  uploadLink.onClick.listen((_) {
+    fileUpload.click();
+  });
+
   var canvas = querySelector("#hive-canvas-id");
   canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
 
