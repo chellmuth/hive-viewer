@@ -134,13 +134,17 @@ class Camera {
 }
 
 void layoutCanvas() {
+  DivElement header = querySelector('#header_id');
+  DivElement progressBar = querySelector('#progress_bar_id');
+
   CanvasElement canvas = querySelector("#hive_canvas_id");
-//  canvas.width = window.innerWidth * 2;
-//  canvas.height = window.innerHeight * 2;
-  canvas.width = 800 * 2;
-  canvas.height = 600 * 2;
-  canvas.style.width = '${canvas.width / 2}px';
-  canvas.style.height = '${canvas.height / 2}px';
+  var width = window.innerWidth;
+  var height = window.innerHeight - header.clientHeight - progressBar.clientHeight;
+
+  canvas.width = width * 2;
+  canvas.height = height * 2;
+  canvas.style.width = '${width}px';
+  canvas.style.height = '${height}px';
 }
 
 void render(GameState gamestate, { List<Move> moves : null }) {

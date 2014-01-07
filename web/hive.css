@@ -8,11 +8,10 @@ body {
   margin: 0px;
 }
 
-.header {
+#header_id {
   background-color: #595959;
   height: 50px;
   width: 100%;
-  position:absolute;
   z-index: 100;
 }
 
@@ -45,9 +44,8 @@ canvas {
   display:block;
 }
 
-.progress-bar {
+#progress_bar_id {
   height: 16px;
-  width: 800px;
   background-color: #595959;
 }
 
