@@ -19,6 +19,7 @@ void main() {
 }
 
 void start() {
+  layoutCanvas();
   var gamestate = new GameState();
 
   FileUploadInputElement fileUpload = querySelector("#file_upload_id");
@@ -39,13 +40,13 @@ void start() {
 
   var firstButton = querySelector("#button_first_id");
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
-  
+
   var canvas = querySelector("#hive_canvas_id");
 
   canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
-  
+
   var dragHandler = new DragHandler(canvas);
-  
+
   var adjustCamera = (DragEvent e) {
     var movement = e.mouseEvent.movement;
     camera.offsetX += movement.x;
@@ -54,8 +55,8 @@ void start() {
   };
   dragHandler.onDragStart.listen(adjustCamera);
   dragHandler.onDrag.listen(adjustCamera);
-  
-  window.onKeyDown.listen((event) => handleKeyPress(event, gamestate)); 
+
+  window.onKeyDown.listen((event) => handleKeyPress(event, gamestate));
 
   SGF.downloadSGF().then((sgf) {
     setupSGF(sgf, gamestate);
@@ -92,7 +93,7 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var initialTranslation = new Point(canvas.width / 4 - HexView.width / 4, canvas.height / 4 - HexView.height / 4);
   var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
   var coordinate = hexAtPoint(hexmap, translatedPoint);
-  
+
   List<Move> moves = [];
   Piece clickedPiece = gamestate.pieceAt(coordinate);
   if (clickedPiece != null) {
@@ -112,24 +113,34 @@ void setupSGF(String sgf, GameState gamestate) {
 
 void showNextMove(GameState gamestate) {
   gamestate.stepBy(1);
-  
+
   render(gamestate);
 }
 
 void showPreviousMove(GameState gamestate) {
   gamestate.stepBy(-1);
-  
+
   render(gamestate);
 }
 
 void showFirstMove(GameState gamestate) {
   gamestate.step(1);
-  
+
   render(gamestate);
 }
 
 class Camera {
   num offsetX = 0, offsetY = 0;
+}
+
+void layoutCanvas() {
+  CanvasElement canvas = querySelector("#hive_canvas_id");
+//  canvas.width = window.innerWidth * 2;
+//  canvas.height = window.innerHeight * 2;
+  canvas.width = 800 * 2;
+  canvas.height = 600 * 2;
+  canvas.style.width = '${canvas.width / 2}px';
+  canvas.style.height = '${canvas.height / 2}px';
 }
 
 void render(GameState gamestate, { List<Move> moves : null }) {
@@ -139,7 +150,7 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   progressBar.style.width = "${ canvas.width / 2 * gamestate.percentComplete - 2}px";
 
   var context = canvas.context2D;
-  
+
   context.save();
   var gradient = context.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, '#F2E4B1');
