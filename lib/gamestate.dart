@@ -103,6 +103,15 @@ class GameState {
     return tile.coordinate;
   }
 
+  int getHeight(Piece piece) {
+    var location = locate(piece);
+    List<Piece> stack = stackAt(location);
+    for (var i = 0; i < stack.length; i++) {
+      if (stack[i] == piece) { return i + 1; }
+    }
+    throw new Exception('Unplayed piece');
+  }
+
   bool isLocationEmpty(Coordinate location) {
     return pieceAt(location) == null;
   }

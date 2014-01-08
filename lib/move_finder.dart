@@ -27,13 +27,31 @@ bool _checkSlideRulesOnTransition(List<Coordinate> transition, GameState gamesta
   return true;
 }
 
+class DismountHiveMoveFinder {
+  static List<Move> findMoves(Piece piece, GameState gamestate) {
+    List<Move> moves = [];
+    List<Tile> tiles = gamestate.toList();
+    var tile = tiles.firstWhere((tile) => tile.piece == piece);
+    if (tile.height == 1) { return []; }
+
+    for (Direction direction in Direction.all()) {
+      Coordinate adjacentLocation = tile.coordinate.applyDirection(direction);
+      if (gamestate.isLocationEmpty(adjacentLocation)) {
+        Move move = new Move(piece, tile.coordinate, adjacentLocation);
+        moves.add(move);
+      }
+    }
+    return moves;
+  }
+}
+
 class ClimbHiveMoveFinder {
   static List<Move> findMoves(Piece piece, GameState gamestate) {
     List<Move> moves = [];
     List<Tile> tiles = gamestate.toList();
     var tile = tiles.firstWhere((tile) => tile.piece == piece);
     if (tile.height > 1) { return []; }
-    
+
     for (Tile neighbor in gamestate.neighbors(tile.coordinate)) {
       Move move = new Move(piece, tile.coordinate, neighbor.coordinate);
       if (checkOneHiveRule(move, gamestate)) {
@@ -63,7 +81,7 @@ class JumpMoveFinder {
         moves.add(new Move(piece, tile.coordinate, targetCoordinate));
       }
     }
-    
+
     return moves.where((move) => checkOneHiveRule(move, gamestate)).toList();
   }
 }
@@ -125,7 +143,7 @@ class RangedSlideMoveFinder {
     }
     return transitionLists;
   }
-  
+
   static List<List<Coordinate>> _buildTransitionLists(int range, Piece piece, GameState gamestate) {
     gamestate = gamestate.copy();
 
@@ -159,9 +177,9 @@ class RangedSlideMoveFinder {
   static List<Move> findMoves(int range, Piece piece, GameState gamestate) {
     var startingLocation = gamestate.locate(piece);
 
-    List<List<Coordinate>> transitionLists = _buildTransitionLists(range, piece, gamestate); 
+    List<List<Coordinate>> transitionLists = _buildTransitionLists(range, piece, gamestate);
     Set<Coordinate> moveLocations = _buildMoveLocationsFromTransitionLists(transitionLists, gamestate);
 
-    return moveLocations.map((location) => new Move(piece, startingLocation, location)).toList();    
+    return moveLocations.map((location) => new Move(piece, startingLocation, location)).toList();
   }
 }

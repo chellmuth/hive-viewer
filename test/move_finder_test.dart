@@ -6,6 +6,7 @@ class TestMoveFinder {
       group('Jump Finder:', _jumpFinder);
       group('Ranged Slide Finder:', _rangedSlideFinder);
       group('Climb Hive Finder:', _climbHiveFinder);
+      group('Dismount Hive Finder:', _dismountHiveFinder);
     });
   }
 
@@ -216,7 +217,7 @@ class TestMoveFinder {
       expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
     });
   }
-  
+
   static void _climbHiveFinder() {
     test('climb onto neighboring pieces', () {
       var _wB_ = new Piece(Player.WHITE, Bug.BEETLE, 1);
@@ -247,10 +248,47 @@ class TestMoveFinder {
       Piece piece = _wB_;
       gamestate.appendMove(new Move(piece, new Coordinate(1, 1), new Coordinate(0, 1)));
       gamestate.stepToEnd();
-      
+
       var moves = ClimbHiveMoveFinder.findMoves(piece, gamestate);
       expect(moves.isEmpty, isTrue);
     });
+  }
 
+  static void _dismountHiveFinder() {
+    test('empty if not on hive', () {
+      var _wB_ = new Piece(Player.WHITE, Bug.BEETLE, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG' ],
+          [ '  ', _wB_ ]
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _wB_;
+
+      var moves = DismountHiveMoveFinder.findMoves(piece, gamestate);
+      expect(moves.isEmpty, isTrue);
+    });
+
+    test('returns empty adjacent moves', () {
+      var _wB_ = new Piece(Player.WHITE, Bug.BEETLE, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', 'wG', '__' ],
+          [ 'wG', 'wG', '__' ],
+        [ '  ', _wB_, 'wG' ]
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _wB_;
+      gamestate.appendMove(new Move(piece, new Coordinate(2, 1), new Coordinate(1, 1)));
+      gamestate.stepToEnd();
+
+      var moves = DismountHiveMoveFinder.findMoves(piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(0, 2),
+        new Coordinate(1, 2),
+        new Coordinate(2, 1),
+      ];
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
   }
 }
