@@ -23,8 +23,14 @@ a:hover {
   z-index: 100;
 }
 
+#file-upload-id {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+}
+
 #upload-id {
-  position:absolute;
+  position: absolute;
   bottom: 25px;
   right: 20px;
 }
