@@ -79,3 +79,21 @@ canvas {
   height: 14px;
   background-color: #FF797A;
 }
+
+.playback-control {
+  position:absolute;
+  bottom: 25px;
+}
+
+#control-start-id {
+  left: 20px;
+}
+#control-rewind-id {
+  left: 60px;
+}
+#control-forward-id {
+  left: 100px;
+}
+#control-end-id {
+  left: 140px;
+}
