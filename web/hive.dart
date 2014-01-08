@@ -32,14 +32,17 @@ void start() {
         ..onLoadEnd.listen((_) => setupSGF(fileReader.result, gamestate));
   });
 
-  var nextButton = querySelector("#button-next-id");
+  var nextButton = querySelector("#control-forward-id");
   nextButton.onClick.listen((_) => showNextMove(gamestate));
 
-  var previousButton = querySelector("#button-previous-id");
+  var previousButton = querySelector("#control-rewind-id");
   previousButton.onClick.listen((_) => showPreviousMove(gamestate));
 
-  var firstButton = querySelector("#button-first-id");
+  var firstButton = querySelector("#control-start-id");
   firstButton.onClick.listen((_) => showFirstMove(gamestate));
+
+  var lastButton = querySelector("#control-end-id");
+  lastButton.onClick.listen((_) => showLastMove(gamestate));
 
   AnchorElement uploadLink = querySelector('#upload-anchor-id');
   uploadLink.onClick.listen((_) {
@@ -68,10 +71,6 @@ void start() {
 
   SGF.downloadSGF().then((sgf) {
     setupSGF(sgf, gamestate);
-
-    nextButton.disabled = false;
-    previousButton.disabled = false;
-    firstButton.disabled = false;
   });
 }
 
@@ -133,6 +132,12 @@ void showPreviousMove(GameState gamestate) {
 
 void showFirstMove(GameState gamestate) {
   gamestate.step(1);
+
+  render(gamestate);
+}
+
+void showLastMove(GameState gamestate) {
+  gamestate.stepToEnd();
 
   render(gamestate);
 }
