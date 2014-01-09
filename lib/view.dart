@@ -6,18 +6,20 @@ import 'dart:math' show PI;
 import 'assets.dart';
 import 'gamemodel.dart';
 
+part 'bench.dart';
+
 abstract class HexView {
   static final num width = 80 * 2;
   static final num height = 90 * 2;
-  
+
   static final num pointHeight = .25;
-  
+
   int get row;
   int get col;
   int get stackHeight => 1;
   String get strokeColor;
   String get fillColor;
-  
+
   num get xOffset {
     var xOffset = col * width;
     if (row % 2 == 1) { xOffset += .5 * width; }
@@ -30,7 +32,7 @@ abstract class HexView {
     yOffset += 1;
     return yOffset;
   }
-  
+
   void draw(CanvasRenderingContext2D context) {
     context.fillStyle = fillColor;
     context.strokeStyle = strokeColor;
@@ -71,7 +73,7 @@ class TileView extends HexView {
   int get stackHeight => tile.height;
   String get fillColor => tile.piece.player == Player.WHITE ? '#595959' : '#FFFFF7';
   String get strokeColor => '#333';
-  
+
   void draw(CanvasRenderingContext2D context) {
     //super.draw(context);
 
@@ -80,7 +82,7 @@ class TileView extends HexView {
     var yOffset = this.yOffset - (tile.height - 1) * yStackOffset;
 
     ImageElement asset = AssetLibrary.imageForPiece(tile.piece);
-    context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);      
+    context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);
 
     var boxSize = 20;
     var dotContainerRect = new Rectangle(xOffset + .85 * HexView.width - boxSize / 2, yOffset + .3 * HexView.height - boxSize / 2, boxSize, boxSize);
@@ -113,13 +115,13 @@ class TileView extends HexView {
     _renderDot(context, boundingRect, 1/4, 1/2);
     _renderDot(context, boundingRect, 3/4, 1/2);
   }
-  
+
   void _renderThreeDots(CanvasRenderingContext2D context, Rectangle boundingRect) {
     _renderDot(context, boundingRect, 1/4, 2/3);
     _renderDot(context, boundingRect, 3/4, 2/3);
     _renderDot(context, boundingRect, 1/2, 1/3);
 }
-  
+
   void _renderDot(CanvasRenderingContext2D context, Rectangle boundingRect, num xCenter, num yCenter) {
     context.save();
 
@@ -135,11 +137,11 @@ class TileView extends HexView {
 
 class CoveredPieceView {
   Piece piece;
-  
+
   CoveredPieceView(this.piece);
-  
+
   String get letter {
-    switch (piece.bug) { 
+    switch (piece.bug) {
       case Bug.ANT: return 'A';
       case Bug.BEETLE: return 'B';
       case Bug.GRASSHOPPER: return 'G';
@@ -147,9 +149,9 @@ class CoveredPieceView {
       case Bug.SPIDER: return 'S';
     }
   }
-  
+
   String get color {
-    switch (piece.bug) { 
+    switch (piece.bug) {
       case Bug.ANT: return '#6DA9EE';
       case Bug.BEETLE: return '#E56CFE';
       case Bug.GRASSHOPPER: return '#9ADA54';
@@ -162,12 +164,12 @@ class CoveredPieceView {
   void draw(CanvasRenderingContext2D context, Rectangle bounds) {
     context.save();
     context.fillStyle = color;
-    
+
     context.beginPath();
     context.arc(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, bounds.width / 2, 0, PI * 2, true);
     context.closePath();
     context.fill();
-    
+
     var fontSize = 14;
     context.font = '${fontSize}pt Futura';
     context.fillStyle = piece.player == Player.WHITE ? '#FFFFF7' : '#595959';

@@ -12,8 +12,7 @@ import '../lib/gamemodel.dart';
 import '../lib/rules.dart';
 
 var camera = new Camera();
-var player1 = '';
-var player2 = '';
+Bench bench;
 
 
 void main() {
@@ -114,8 +113,7 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
 
 void setupSGF(String sgf, GameState gamestate) {
   ParsedGame parsedGame = SGF.parseSGF(sgf);
-  player1 = parsedGame.player1;
-  player2 = parsedGame.player2;
+  bench = new Bench(parsedGame.player1, parsedGame.player2);
   gamestate.initialize(parsedGame.gameEvents);
   gamestate.step(1);
   render(gamestate);
@@ -208,44 +206,5 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   }
 
   context.restore();
-
-  _drawBench(context, gamestate);
+  bench.draw(context, canvas);
 }
-
-void _drawBench(CanvasRenderingContext2D context, GameState gamestate) {
-  CanvasElement canvas = querySelector("#hive-canvas-id");
-
-  context.save();
-
-  context.lineWidth = 2;
-  context.strokeStyle = '#4A4A4A';
-  context.fillStyle = 'rgba(236, 217, 176, .95)';
-  // context.fillStyle = 'rgba(255, 255, 255, .3)';
-  var widthRatio = .5;
-  var height = 260;
-
-  var left = canvas.width * (1 - widthRatio) / 2;
-  var top = canvas.height - height;
-  var width = canvas.width * widthRatio;
-  context.rect(left, top, width, height + 1);
-  context.fill();
-  context.stroke();
-
-  var fontSize = 45;
-  context.font = '${fontSize}px Futura';
-  context.fillStyle = '#000';
-
-  var verticalMargin = 10;
-  {
-    var metrics = context.measureText(player1);
-    var textWidth = metrics.width;
-    context.fillText(player1, left + width / 4 - textWidth / 2, top + fontSize + verticalMargin);
-  }
-  {
-    var metrics = context.measureText(player2);
-    var textWidth = metrics.width;
-    context.fillText(player2, left + width * 3 / 4 - textWidth / 2, top + fontSize + verticalMargin);
-  }
-}
-
-
