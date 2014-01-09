@@ -22,21 +22,23 @@ class Bench {
     context.fill();
     context.stroke();
 
+    _drawPlayerInRect(context, player1, new Rectangle(left, top, width / 2, height));
+    _drawPlayerInRect(context, player2, new Rectangle(left + width / 2, top, width / 2, height));
+
+    context.restore();
+  }
+
+  void _drawPlayerInRect(CanvasRenderingContext2D context, String player, Rectangle bounds) {
+    context.save();
+
     var fontSize = 45;
     context.font = '${fontSize}px Futura';
     context.fillStyle = '#000';
 
     var verticalMargin = 10;
-    {
-      var metrics = context.measureText(player1);
-      var textWidth = metrics.width;
-      context.fillText(player1, left + width / 4 - textWidth / 2, top + fontSize + verticalMargin);
-    }
-    {
-      var metrics = context.measureText(player2);
-      var textWidth = metrics.width;
-      context.fillText(player2, left + width * 3 / 4 - textWidth / 2, top + fontSize + verticalMargin);
-    }
+    var metrics = context.measureText(player);
+    var textWidth = metrics.width;
+    context.fillText(player, bounds.left + bounds.width / 2 - textWidth / 2, bounds.top + fontSize + verticalMargin);
 
     context.restore();
   }
