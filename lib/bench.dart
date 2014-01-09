@@ -53,12 +53,13 @@ class Bench {
     }
     var xOrigin = (bounds.width - totalBugWidth) / 2 + bounds.left;
     for (var i = 0; i < 5; i++) {
+      var count = benchPieces[bugs[i]];
+      if (count == 0) { continue; }
       ImageElement asset = AssetLibrary.imageForPiece(new Piece(player, bugs[i], 0));
       var width = asset.naturalWidth * assetRatio;
       var height = asset.naturalHeight * assetRatio;
       context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOrigin + width * i, bounds.bottom - height - verticalMargin, width, height);
 
-      var count = benchPieces[bugs[i]];
       var diameter = 30;
       var bugCountRect = new Rectangle(xOrigin + width * (i + .7), bounds.bottom - (height * .97) - verticalMargin, diameter, diameter);
       _drawBugCount(context, bugCountRect, player, count);
