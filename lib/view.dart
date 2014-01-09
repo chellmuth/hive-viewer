@@ -34,6 +34,7 @@ abstract class HexView {
   }
 
   void draw(CanvasRenderingContext2D context) {
+    context.save();
     context.fillStyle = fillColor;
     context.strokeStyle = strokeColor;
     context.beginPath();
@@ -46,6 +47,7 @@ abstract class HexView {
     context.closePath();
     context.fill();
     context.stroke();
+    context.restore();
   }
 }
 
@@ -77,6 +79,8 @@ class TileView extends HexView {
   void draw(CanvasRenderingContext2D context) {
     //super.draw(context);
 
+    context.save();
+
     var xStackOffset = 6, yStackOffset = 10;
     var xOffset = this.xOffset + (tile.height - 1) * xStackOffset;
     var yOffset = this.yOffset - (tile.height - 1) * yStackOffset;
@@ -105,6 +109,8 @@ class TileView extends HexView {
       coveredPieceView.draw(context, coveredPieceBounds);
       coveredPieceBounds = new Rectangle(coveredPieceBounds.left, coveredPieceBounds.top - diameter - margin, coveredPieceBounds.width, coveredPieceBounds.height);
     }
+
+    context.restore();
   }
 
   void _renderOneDot(CanvasRenderingContext2D context, Rectangle boundingRect) {

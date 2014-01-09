@@ -206,5 +206,6 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   }
 
   context.restore();
+
   bench.draw(context, canvas);
 }

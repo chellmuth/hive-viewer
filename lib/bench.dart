@@ -17,6 +17,7 @@ class Bench {
     var left = canvas.width * (1 - widthRatio) / 2;
     var top = canvas.height - height;
     var width = canvas.width * widthRatio;
+    context.beginPath();
     context.rect(left, top, width, height + 1);
     context.fill();
     context.stroke();
@@ -36,5 +37,7 @@ class Bench {
       var textWidth = metrics.width;
       context.fillText(player2, left + width * 3 / 4 - textWidth / 2, top + fontSize + verticalMargin);
     }
+
+    context.restore();
   }
 }
