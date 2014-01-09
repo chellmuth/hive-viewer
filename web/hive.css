@@ -16,6 +16,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.playback-control {
+  cursor: pointer;
+}
+
 #header-id {
   background-color: #595959;
   height: 50px;
