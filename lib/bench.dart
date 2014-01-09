@@ -6,7 +6,7 @@ class Bench {
   String player1, player2;
   Bench(this.player1, this.player2);
 
-  void draw(CanvasRenderingContext2D context, CanvasElement canvas) {
+  void draw(CanvasRenderingContext2D context, CanvasElement canvas, GameState gamestate) {
     context.save();
 
     context.lineWidth = 2;
@@ -22,13 +22,13 @@ class Bench {
     context.fill();
     context.stroke();
 
-    _drawPlayerInRect(context, Player.WHITE, new Rectangle(left, top, width / 2, height));
-    _drawPlayerInRect(context, Player.BLACK, new Rectangle(left + width / 2, top, width / 2, height));
+    _drawPlayerInRect(context, gamestate, new Rectangle(left, top, width / 2, height), Player.WHITE);
+    _drawPlayerInRect(context, gamestate, new Rectangle(left + width / 2, top, width / 2, height), Player.BLACK);
 
     context.restore();
   }
 
-  void _drawPlayerInRect(CanvasRenderingContext2D context, Player player, Rectangle bounds) {
+  void _drawPlayerInRect(CanvasRenderingContext2D context, GameState gamestate, Rectangle bounds, Player player) {
     context.save();
 
     var name = player == Player.WHITE ? player1 : player2;
@@ -42,6 +42,7 @@ class Bench {
     var textWidth = metrics.width;
     context.fillText(name, bounds.left + bounds.width / 2 - textWidth / 2, bounds.top + fontSize + verticalMargin);
 
+    Map<Bug, int> benchPieces = gamestate.benchPieces(player);
 
     var totalBugWidth = 0;
     var assetRatio = 3/4;
@@ -56,8 +57,30 @@ class Bench {
       var width = asset.naturalWidth * assetRatio;
       var height = asset.naturalHeight * assetRatio;
       context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOrigin + width * i, bounds.bottom - height - verticalMargin, width, height);
+
+      var count = benchPieces[bugs[i]];
+      var diameter = 30;
+      var bugCountRect = new Rectangle(xOrigin + width * (i + .7), bounds.bottom - (height * .97) - verticalMargin, diameter, diameter);
+      _drawBugCount(context, bugCountRect, player, count);
     }
 
+    context.restore();
+  }
+
+  void _drawBugCount(CanvasRenderingContext2D context, Rectangle bounds, Player player, int count) {
+    context.save();
+    context.fillStyle = player == Player.WHITE ? '#595959' : '#FFFFF7';
+
+    context.beginPath();
+    context.arc(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, bounds.width / 2, 0, PI * 2, true);
+    context.closePath();
+    context.fill();
+
+    var fontSize = 14;
+    context.font = '${fontSize}pt Futura';
+    context.fillStyle = player == Player.WHITE ? '#FFFFF7' : '#595959';
+    var metrics = context.measureText(count.toString());
+    context.fillText(count.toString(), bounds.left + bounds.width / 2 - metrics.width / 2, bounds.top + bounds.height / 2 + fontSize / 2);
     context.restore();
   }
 }

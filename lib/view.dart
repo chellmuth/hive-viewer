@@ -5,6 +5,7 @@ import 'dart:math' show PI;
 
 import 'assets.dart';
 import 'gamemodel.dart';
+import 'gamestate.dart';
 
 part 'bench.dart';
 
