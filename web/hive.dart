@@ -99,7 +99,7 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   var hexmap = new Hexmap(80, 90, .25);
 
   var canvas = querySelector("#hive-canvas-id");
-  var initialTranslation = new Point(canvas.width / 4 - HexView.width / 4, canvas.height / 4 - HexView.height / 4);
+  var initialTranslation = new Point(canvas.width / 4 - HexView.width / 4, canvas.height / 4 - HexView.height / 4 - Bench.height / 4);
   var translatedPoint = event.offset - new Point(camera.offsetX, camera.offsetY) - initialTranslation;
   var coordinate = hexAtPoint(hexmap, translatedPoint);
 
@@ -179,7 +179,7 @@ void render(GameState gamestate, { List<Move> moves : null }) {
 
   context.save();
 
-  context.translate(canvas.width / 2 - HexView.width / 2, canvas.height / 2 - HexView.height / 2);
+  context.translate(canvas.width / 2 - HexView.width / 2, (canvas.height - Bench.height) / 2 - HexView.height / 2);
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile, gamestate.piecesCoveredByTile(tile))).toList();

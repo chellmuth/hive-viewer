@@ -1,6 +1,8 @@
 part of view;
 
 class Bench {
+  static num height = 260;
+
   String player1, player2;
   Bench(this.player1, this.player2);
 
@@ -11,7 +13,6 @@ class Bench {
     context.strokeStyle = '#4A4A4A';
     context.fillStyle = 'rgba(236, 217, 176, .95)';
     var widthRatio = .5;
-    var height = 260;
 
     var left = canvas.width * (1 - widthRatio) / 2;
     var top = canvas.height - height;
