@@ -10,14 +10,16 @@ class ParsedGame {
   String player1;
   String player2;
   List<GameEvent> gameEvents = [];
+
+  bool valid = true;
 }
 
 class SGF {
   static Future downloadSGF() {
     var path = 'sgf/test1.sgf';
-    return HttpRequest.getString(path); 
+    return HttpRequest.getString(path);
   }
-  
+
   static ParsedGame parseSGF(String SGFString) {
     var game = new ParsedGame();
     var lineSplitter = new LineSplitter();
@@ -27,14 +29,21 @@ class SGF {
 
     return game;
   }
-  
+
   static _parseLine(String line, ParsedGame game) {
+    var gameTypeExp = new RegExp(r'^SU\[hive(-\w+)\]');
+    var gameTypeMatch = gameTypeExp.firstMatch(line);
+    if (gameTypeMatch != null) {
+      print("Invalid game: ${line}");
+      game.valid = false;
+    }
+
     var playerNameExp = new RegExp(r'P([01])\[id "([^"]+)"\]');
     var playerNameMatch = playerNameExp.firstMatch(line);
     if (playerNameMatch != null) {
       var playerNumber = int.parse(playerNameMatch.group(1));
       var playerName = playerNameMatch.group(2);
-      
+
       if (playerNumber == 0) {
         game.player1 = playerName;
       } else if (playerNumber == 1) {
@@ -66,19 +75,19 @@ class SGF {
     var bug = match.group(3);
     var bugCount = match.group(4);
     var relativeTo = match.group(5);
-    
+
     var piece = new Piece(Player.parse(color), Bug.parse(bug), _parseBugCount(bugCount));
     var relativePiece = _parseRelativePiece(relativeTo);
     var direction = _parseDirection(relativeTo);
-    
+
     return new GameEvent(piece, relativePiece, direction);
   }
-  
+
   static num _parseBugCount(String bugCount) {
     if (bugCount == null) { return 0; }
     return int.parse(bugCount, radix: 10);
   }
-  
+
   static Piece _parseRelativePiece(String relativeTo) {
     var pieceExp = new RegExp(r"([wb])([ABGQS])([123])?");
     var match = pieceExp.firstMatch(relativeTo);
@@ -90,7 +99,7 @@ class SGF {
     }
     return null;
   }
-  
+
   static Direction _parseDirection(String relativeTo) {
     if (relativeTo == '.') { return null; }
     if (relativeTo.startsWith('-')) { return Direction.LEFT; }
@@ -99,8 +108,8 @@ class SGF {
     if (relativeTo.endsWith('-')) { return Direction.RIGHT; }
     if (relativeTo.endsWith('\\')) { return Direction.DOWN_RIGHT; }
     if (relativeTo.endsWith('/')) { return Direction.UP_RIGHT; }
-    
+
     return Direction.ABOVE;
   }
-  
+
 }
