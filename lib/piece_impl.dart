@@ -20,6 +20,7 @@ class Beetle extends Piece {
       moves.addAll(ClimbHiveMoveFinder.findMoves(this, gamestate));
     } else {
       moves.addAll(DismountHiveMoveFinder.findMoves(this, gamestate));
+      moves.addAll(AtopHiveMoveFinder.findMoves(this, gamestate));
     }
     return moves;
   }
