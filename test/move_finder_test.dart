@@ -7,6 +7,7 @@ class TestMoveFinder {
       group('Ranged Slide Finder:', _rangedSlideFinder);
       group('Climb Hive Finder:', _climbHiveFinder);
       group('Dismount Hive Finder:', _dismountHiveFinder);
+      group('Atop Hive Finder:', _atopHiveFinder);
     });
   }
 
@@ -287,6 +288,69 @@ class TestMoveFinder {
         new Coordinate(0, 2),
         new Coordinate(1, 2),
         new Coordinate(2, 1),
+      ];
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
+  }
+
+  static void _atopHiveFinder() {
+    test('move on top of adjacent pieces', () {
+      var _wB_ = new Piece(Player.WHITE, Bug.BEETLE, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ 'wG', '  ', 'wG' ],
+          [ 'wG', '  ', '  ' ],
+        [ _wB_, 'wG', '  ' ]
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _wB_;
+      gamestate.appendMove(new Move(piece, new Coordinate(2, 0), new Coordinate(1, 0)));
+      gamestate.stepToEnd();
+
+      var moves = AtopHiveMoveFinder.findMoves(piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(0, 0),
+        new Coordinate(2, 1)
+      ];
+      expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
+
+    test('empty when not atop the hive', () {
+      var _wB_ = new Piece(Player.WHITE, Bug.BEETLE, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ 'wG', '  ', 'wG' ],
+          [ 'wG', '  ', '  ' ],
+        [ _wB_, 'wG', '  ' ]
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _wB_;
+
+      var moves = AtopHiveMoveFinder.findMoves(piece, gamestate);
+      expect(moves.isEmpty, isTrue);
+    });
+
+    test('elevation is no obstacle', () {
+      var _wB_ = new Piece(Player.WHITE, Bug.BEETLE, 1);
+      var _bB_ = new Piece(Player.BLACK, Bug.BEETLE, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ 'wG', _bB_, 'wG' ],
+          [ 'wG', '  ', '  ' ],
+        [ _wB_, 'wG', '  ' ]
+      ]);
+      gamestate.stepToEnd();
+
+      Piece piece = _wB_;
+      Piece otherBeetle = _bB_;
+      gamestate.appendMove(new Move(piece, new Coordinate(2, 0), new Coordinate(1, 0)));
+      gamestate.stepToEnd();
+      gamestate.appendMove(new Move(otherBeetle, new Coordinate(0, 1), new Coordinate(0, 0)));
+      gamestate.stepToEnd();
+
+      var moves = AtopHiveMoveFinder.findMoves(piece, gamestate);
+      var moveCoordinates = [
+        new Coordinate(0, 0),
+        new Coordinate(2, 1)
       ];
       expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
     });

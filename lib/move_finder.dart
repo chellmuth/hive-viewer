@@ -27,6 +27,26 @@ bool _checkSlideRulesOnTransition(List<Coordinate> transition, GameState gamesta
   return true;
 }
 
+class AtopHiveMoveFinder {
+  static List<Move> findMoves(Piece piece, GameState gamestate) {
+    List<Move> moves = [];
+
+    var height = gamestate.getHeight(piece);
+    if (height == 1) { return []; }
+
+    var locations = new Set<Coordinate>();
+    Coordinate location = gamestate.locate(piece);
+    for (Tile neighbor in gamestate.neighbors(location)) {
+      locations.add(neighbor.coordinate);
+    }
+
+    for (Coordinate targetLocation in locations) {
+      moves.add(new Move(piece, location, targetLocation));
+    }
+    return moves;
+  }
+}
+
 class DismountHiveMoveFinder {
   static List<Move> findMoves(Piece piece, GameState gamestate) {
     List<Move> moves = [];
