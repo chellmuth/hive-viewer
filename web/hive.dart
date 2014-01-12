@@ -13,7 +13,7 @@ import '../lib/rules.dart';
 
 var camera = new Camera();
 Bench bench;
-List<Move> validMoves = [];
+Piece selectedPiece;
 
 
 void main() {
@@ -91,7 +91,7 @@ void start() {
 }
 
 void handleKeyPress(KeyboardEvent event, GameState gamestate) {
-  validMoves = [];
+  selectedPiece = null;
 
   switch (event.keyCode) {
     case 37: //left
@@ -121,11 +121,12 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
 
   List<Move> moves = [];
   Piece clickedPiece = gamestate.pieceAt(coordinate);
-  if (clickedPiece != null) {
-    moves.addAll(clickedPiece.moves(gamestate));
+  if (clickedPiece == selectedPiece) {
+    selectedPiece = null;
+  } else {
+    selectedPiece = clickedPiece;
   }
 
-  validMoves = moves;
   render(gamestate);
 }
 
@@ -136,35 +137,35 @@ void setupSGF(String sgf, GameState gamestate) {
     return;
   }
   bench = new Bench(parsedGame.player1, parsedGame.player2);
-  validMoves = [];
+  selectedPiece = null;
   gamestate.initialize(parsedGame.gameEvents);
   gamestate.step(1);
   render(gamestate);
 }
 
 void showNextMove(GameState gamestate) {
-  validMoves = [];
+  selectedPiece = null;
   gamestate.stepBy(1);
 
   render(gamestate);
 }
 
 void showPreviousMove(GameState gamestate) {
-  validMoves = [];
+  selectedPiece = null;
   gamestate.stepBy(-1);
 
   render(gamestate);
 }
 
 void showFirstMove(GameState gamestate) {
-  validMoves = [];
+  selectedPiece = null;
   gamestate.step(1);
 
   render(gamestate);
 }
 
 void showLastMove(GameState gamestate) {
-  validMoves = [];
+  selectedPiece = null;
   gamestate.stepToEnd();
 
   render(gamestate);
@@ -210,7 +211,11 @@ void render(GameState gamestate) {
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile, gamestate.piecesCoveredByTile(tile))).toList();
-  List<MoveView> moveViews = validMoves.map((move) => new MoveView(
+  List<Move> moves = [];
+  if (selectedPiece != null) {
+    moves.addAll(selectedPiece.moves(gamestate));
+  }
+  List<MoveView> moveViews = moves.map((move) => new MoveView(
       move.targetLocation,
       gamestate.stackAt(move.targetLocation).length)
   ).toList();
