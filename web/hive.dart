@@ -65,8 +65,16 @@ void start() {
 
   var dragHandler = new DragHandler(canvas);
 
+  Point currentPoint, lastPoint;
   var adjustCamera = (DragEvent e) {
-    var movement = e.mouseEvent.movement;
+    if (lastPoint == null) {
+      lastPoint = e.mouseEvent.client;
+    } else {
+      lastPoint = currentPoint;
+    }
+    currentPoint = e.mouseEvent.client;
+
+    var movement = currentPoint - lastPoint;
     camera.offsetX += movement.x;
     camera.offsetY += movement.y;
     render(gamestate);
@@ -76,8 +84,8 @@ void start() {
     isClick = false;
     adjustCamera(event);
   });
-  dragHandler.onDrag.listen(adjustCamera);
-  dragHandler.onDragEnd.listen(adjustCamera);
+  dragHandler.onDrag.listen((event) { adjustCamera(event); });
+  dragHandler.onDragEnd.listen((event) { adjustCamera(event); lastPoint = null; });
 
   window.onKeyDown.listen((event) => handleKeyPress(event, gamestate));
   window.onResize.listen((event) {
