@@ -13,6 +13,7 @@ import '../lib/rules.dart';
 
 var camera = new Camera();
 Bench bench;
+List<Move> validMoves = [];
 
 
 void main() {
@@ -51,8 +52,16 @@ void start() {
     fileUpload.click();
   });
 
+  var isClick = false;
   var canvas = querySelector("#hive-canvas-id");
-  canvas.onClick.listen((event) => handleCanvasClick(event, gamestate));
+  canvas.onMouseDown.listen((event) {
+    isClick = true;
+  });
+  canvas.onClick.listen((event) {
+    if (isClick) {
+      handleCanvasClick(event, gamestate);
+    }
+  });
 
   var dragHandler = new DragHandler(canvas);
 
@@ -62,8 +71,13 @@ void start() {
     camera.offsetY += movement.y;
     render(gamestate);
   };
-  dragHandler.onDragStart.listen(adjustCamera);
+
+  dragHandler.onDragStart.listen((event) {
+    isClick = false;
+    adjustCamera(event);
+  });
   dragHandler.onDrag.listen(adjustCamera);
+  dragHandler.onDragEnd.listen(adjustCamera);
 
   window.onKeyDown.listen((event) => handleKeyPress(event, gamestate));
   window.onResize.listen((event) {
@@ -77,6 +91,8 @@ void start() {
 }
 
 void handleKeyPress(KeyboardEvent event, GameState gamestate) {
+  validMoves = [];
+
   switch (event.keyCode) {
     case 37: //left
       gamestate.stepBy(-1);
@@ -108,7 +124,9 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
   if (clickedPiece != null) {
     moves.addAll(clickedPiece.moves(gamestate));
   }
-  render(gamestate, moves: moves);
+
+  validMoves = moves;
+  render(gamestate);
 }
 
 void setupSGF(String sgf, GameState gamestate) {
@@ -118,30 +136,35 @@ void setupSGF(String sgf, GameState gamestate) {
     return;
   }
   bench = new Bench(parsedGame.player1, parsedGame.player2);
+  validMoves = [];
   gamestate.initialize(parsedGame.gameEvents);
   gamestate.step(1);
   render(gamestate);
 }
 
 void showNextMove(GameState gamestate) {
+  validMoves = [];
   gamestate.stepBy(1);
 
   render(gamestate);
 }
 
 void showPreviousMove(GameState gamestate) {
+  validMoves = [];
   gamestate.stepBy(-1);
 
   render(gamestate);
 }
 
 void showFirstMove(GameState gamestate) {
+  validMoves = [];
   gamestate.step(1);
 
   render(gamestate);
 }
 
 void showLastMove(GameState gamestate) {
+  validMoves = [];
   gamestate.stepToEnd();
 
   render(gamestate);
@@ -165,7 +188,7 @@ void layoutCanvas() {
   canvas.style.height = '${height}px';
 }
 
-void render(GameState gamestate, { List<Move> moves : null }) {
+void render(GameState gamestate) {
   CanvasElement canvas = querySelector("#hive-canvas-id");
 
   DivElement progressBar = querySelector("#progress-bar-indicator-id");
@@ -187,8 +210,7 @@ void render(GameState gamestate, { List<Move> moves : null }) {
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile, gamestate.piecesCoveredByTile(tile))).toList();
-  if (moves == null) { moves = []; }
-  List<MoveView> moveViews = moves.map((move) => new MoveView(
+  List<MoveView> moveViews = validMoves.map((move) => new MoveView(
       move.targetLocation,
       gamestate.stackAt(move.targetLocation).length)
   ).toList();

@@ -65,7 +65,6 @@ class MoveView extends HexView {
   Coordinate location;
   int stackHeight;
   MoveView(this.location, stackHeight) {
-    print(stackHeight);
     this.stackHeight = max(1, stackHeight);
   }
 
