@@ -34,17 +34,17 @@ void start() {
         ..onLoadEnd.listen((_) => setupSGF(fileReader.result, gamestate));
   });
 
-  var nextButton = querySelector("#control-forward-id");
-  nextButton.onClick.listen((_) => showNextMove(gamestate));
+  var nextControl = querySelector("#control-forward-id");
+  nextControl.onClick.listen((_) => showNextMove(gamestate));
 
-  var previousButton = querySelector("#control-rewind-id");
-  previousButton.onClick.listen((_) => showPreviousMove(gamestate));
+  var previousControl= querySelector("#control-rewind-id");
+  previousControl.onClick.listen((_) => showPreviousMove(gamestate));
 
-  var firstButton = querySelector("#control-start-id");
-  firstButton.onClick.listen((_) => showFirstMove(gamestate));
+  var firstControl = querySelector("#control-start-id");
+  firstControl.onClick.listen((_) => showFirstMove(gamestate));
 
-  var lastButton = querySelector("#control-end-id");
-  lastButton.onClick.listen((_) => showLastMove(gamestate));
+  var lastControl = querySelector("#control-end-id");
+  lastControl.onClick.listen((_) => showLastMove(gamestate));
 
   AnchorElement uploadLink = querySelector('#upload-anchor-id');
   uploadLink.onClick.listen((_) {
