@@ -12,6 +12,7 @@ class ParsedGame {
   List<GameEvent> gameEvents = [];
 
   bool valid = true;
+  List<String> errors = [];
 }
 
 class SGF {
@@ -34,8 +35,21 @@ class SGF {
     var gameTypeExp = new RegExp(r'^SU\[hive(-\w+)\]');
     var gameTypeMatch = gameTypeExp.firstMatch(line);
     if (gameTypeMatch != null) {
-      print("Invalid game: ${line}");
       game.valid = false;
+      var gameType = gameTypeMatch.group(1);
+      if (gameType.contains("ultimate")) {
+        game.errors.add("Ultimate");
+      } else {
+        if (gameType.contains("l")) {
+          game.errors.add("Ladybug");
+        }
+        if (gameType.contains("m")) {
+          game.errors.add("Mosquito");
+        }
+        if (gameType.contains("p")) {
+          game.errors.add("Pillbug");
+        }
+      }
     }
 
     var playerNameExp = new RegExp(r'P([01])\[id "([^"]+)"\]');

@@ -133,7 +133,9 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
 void setupSGF(String sgf, GameState gamestate) {
   ParsedGame parsedGame = SGF.parseSGF(sgf);
   if (!parsedGame.valid) {
-    window.alert("Game type not supported");
+    var gameType = parsedGame.errors.join(", ");
+    var plural = parsedGame.errors.length > 1 ? "s" : "";
+    window.alert("Game type${plural} not supported: ${gameType}");
     return;
   }
   bench = new Bench(parsedGame.player1, parsedGame.player2);
