@@ -5,6 +5,7 @@ class TestMoveFinder {
     group('Move Finder:', () {
       group('Jump Finder:', _jumpFinder);
       group('Ranged Slide Finder:', _rangedSlideFinder);
+      group('Slide Finder:', _slideFinder);
       group('Climb Hive Finder:', _climbHiveFinder);
       group('Dismount Hive Finder:', _dismountHiveFinder);
       group('Atop Hive Finder:', _atopHiveFinder);
@@ -353,6 +354,34 @@ class TestMoveFinder {
         new Coordinate(2, 1)
       ];
       expect(moves.map((move) => move.targetLocation).toList(), equals(moveCoordinates));
+    });
+  }
+
+  static void _slideFinder() {
+    test('respects one hive rule', () {
+      var _wA_ = new Piece(Player.BLACK, Bug.ANT, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', '  ', 'bA' ],
+          [ '__', _wA_, 'bA' ]
+      ]);
+      gamestate.stepToEnd();
+      var piece = _wA_;
+      var moves = SlideMoveFinder.findMoves(piece, gamestate);
+      expect(moves.firstWhere((move) => move.targetLocation == new Coordinate(1, 0), orElse: () => null), isNull);
+    });
+
+    test('respects dangling piece one hive rule', () {
+      var _wA_ = new Piece(Player.BLACK, Bug.ANT, 1);
+      var gamestate = GameStateTestHelper.build([
+        [ '  ', '  ', 'bA', '  ' ],
+          [ 'wG', '  ', _wA_, '  ' ],
+        [ '  ', 'wG', '  ', 'wG' ],
+          [ '  ', 'wG', 'wG', '  ' ]
+      ]);
+      gamestate.stepToEnd();
+      var piece = _wA_;
+      var moves = SlideMoveFinder.findMoves(piece, gamestate);
+      expect(moves.isEmpty, isTrue);
     });
   }
 }

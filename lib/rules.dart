@@ -7,16 +7,20 @@ class Move {
   Piece piece;
   Coordinate currentLocation;
   Coordinate targetLocation;
-  
+
   Move(this.piece, this.currentLocation, this.targetLocation);
 
   bool operator ==(other) {
     if (other is !Move) { return false; }
-    return piece == other.piece && currentLocation == other.currentLocation && targetLocation == other.targetLocation; 
+    return piece == other.piece && currentLocation == other.currentLocation && targetLocation == other.targetLocation;
   }
 
   int get hashCode {
     return piece.hashCode ^ currentLocation.hashCode ^ targetLocation.hashCode;
+  }
+
+  String toString() {
+    return "${this.piece} from ${currentLocation} to ${targetLocation}";
   }
 }
 
@@ -28,12 +32,12 @@ bool checkOneHiveRule(Move move, GameState gamestate) {
   gamestate = gamestate.copy();
   gamestate.appendMove(move);
   gamestate.stepBy(1);
-  
+
   var tiles = gamestate.toList();
   if (tiles.length == 1) { return true; }
 
   var checkedPieces = new Set<Piece>();
-  
+
   void addNeighbors(Tile tile) {
     checkedPieces.add(tile.piece);
     for (Piece stackMate in gamestate.stackAt(tile.coordinate)) {

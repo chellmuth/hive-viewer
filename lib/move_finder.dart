@@ -132,7 +132,7 @@ class SlideMoveFinder {
           ) {
             var originalGamestate = gamestate;
             gamestate = gamestate.copy();
-            gamestate.appendMove(new Move(gamestate.pieceAt(startingLocation), startingLocation, newLocation));
+            gamestate.appendMove(new Move(gamestate.pieceAt(startingLocation), startingLocation, location));
             gamestate.stepBy(1);
             if(_checkSlideRulesOnTransition([ location, newLocation ], gamestate)) {
               newLocations.add(newLocation);
