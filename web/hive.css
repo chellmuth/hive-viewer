@@ -98,10 +98,10 @@ canvas {
 #control-start-id {
   left: 20px;
 }
-#control-rewind-id {
+#control-previous-id {
   left: 60px;
 }
-#control-forward-id {
+#control-next-id {
   left: 100px;
 }
 #control-end-id {
