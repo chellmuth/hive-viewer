@@ -70,7 +70,7 @@ class Bench {
 
   void _drawBugCount(CanvasRenderingContext2D context, Rectangle bounds, Player player, int count) {
     context.save();
-    context.fillStyle = player == Player.WHITE ? '#595959' : '#FFFFF7';
+    context.fillStyle = player == Player.WHITE ? Color.BlackTile : Color.WhiteTile;
 
     context.beginPath();
     context.arc(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, bounds.width / 2, 0, PI * 2, true);
@@ -79,7 +79,7 @@ class Bench {
 
     var fontSize = 14;
     context.font = '${fontSize}pt Futura';
-    context.fillStyle = player == Player.WHITE ? '#FFFFF7' : '#595959';
+    context.fillStyle = player == Player.WHITE ? Color.WhiteTile : Color.BlackTile;
     var metrics = context.measureText(count.toString());
     context.fillText(count.toString(), bounds.left + bounds.width / 2 - metrics.width / 2, bounds.top + bounds.height / 2 + fontSize / 2);
     context.restore();

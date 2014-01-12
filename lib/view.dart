@@ -6,6 +6,7 @@ import 'dart:math' show PI, max;
 import 'assets.dart';
 import 'gamemodel.dart';
 import 'gamestate.dart';
+import 'color.dart';
 
 part 'bench.dart';
 
@@ -71,7 +72,7 @@ class MoveView extends HexView {
   int get row => location.row;
   int get col => location.col;
   String get fillColor => 'rgba(255, 153, 154, 0.8)';
-  String get strokeColor => '#333';
+  String get strokeColor => Color.TileBorder;
 }
 
 class TileView extends HexView {
@@ -86,8 +87,8 @@ class TileView extends HexView {
   int get row => tile.row;
   int get col => tile.col;
   int get stackHeight => tile.height;
-  String get fillColor => tile.piece.player == Player.WHITE ? '#595959' : '#FFFFF7';
-  String get strokeColor => '#333';
+  String get fillColor => tile.piece.player == Player.WHITE ? Color.BlackTile : Color.WhiteTile;
+  String get strokeColor => Color.TileBorder;
 
   void draw(CanvasRenderingContext2D context) {
     //super.draw(context);
@@ -187,7 +188,7 @@ class CoveredPieceView {
 
     var fontSize = 14;
     context.font = '${fontSize}pt Futura';
-    context.fillStyle = piece.player == Player.WHITE ? '#FFFFF7' : '#595959';
+    context.fillStyle = piece.player == Player.WHITE ? Color.WhiteTile : Color.BlackTile;
     var metrics = context.measureText(letter);
     context.fillText(letter, bounds.left + bounds.width / 2 - metrics.width / 2, bounds.top + bounds.height / 2 + fontSize / 2);
     context.restore();
