@@ -11,9 +11,28 @@ import '../lib/hex_math.dart';
 import '../lib/gamemodel.dart';
 import '../lib/rules.dart';
 
+class SelectionState {
+  Piece piece;
+  List<Move> validMoves = [];
+
+  void select(Piece piece, GameState gamestate) {
+    this.piece = piece;
+    if (piece == null) {
+      validMoves = [];
+    } else {
+      validMoves = piece.moves(gamestate);
+    }
+  }
+
+  void clear() {
+    piece = null;
+    validMoves = [];
+  }
+}
+
 var camera = new Camera();
 Bench bench;
-Piece selectedPiece;
+SelectionState selectionState = new SelectionState();
 
 
 void main() {
@@ -99,7 +118,7 @@ void start() {
 }
 
 void handleKeyPress(KeyboardEvent event, GameState gamestate) {
-  selectedPiece = null;
+  selectionState.clear();
 
   switch (event.keyCode) {
     case 37: //left
@@ -129,11 +148,7 @@ void handleCanvasClick(MouseEvent event, GameState gamestate) {
 
   List<Move> moves = [];
   Piece clickedPiece = gamestate.pieceAt(coordinate);
-  if (clickedPiece == selectedPiece) {
-    selectedPiece = null;
-  } else {
-    selectedPiece = clickedPiece;
-  }
+  selectionState.select(clickedPiece, gamestate);
 
   render(gamestate);
 }
@@ -147,35 +162,35 @@ void setupSGF(String sgf, GameState gamestate) {
     return;
   }
   bench = new Bench(parsedGame.player1, parsedGame.player2);
-  selectedPiece = null;
+  selectionState.clear();
   gamestate.initialize(parsedGame.gameEvents);
   gamestate.step(1);
   render(gamestate);
 }
 
 void showNextMove(GameState gamestate) {
-  selectedPiece = null;
+  selectionState.clear();
   gamestate.stepBy(1);
 
   render(gamestate);
 }
 
 void showPreviousMove(GameState gamestate) {
-  selectedPiece = null;
+  selectionState.clear();
   gamestate.stepBy(-1);
 
   render(gamestate);
 }
 
 void showFirstMove(GameState gamestate) {
-  selectedPiece = null;
+  selectionState.clear();
   gamestate.step(1);
 
   render(gamestate);
 }
 
 void showLastMove(GameState gamestate) {
-  selectedPiece = null;
+  selectionState.clear();
   gamestate.stepToEnd();
 
   render(gamestate);
@@ -221,11 +236,7 @@ void render(GameState gamestate) {
   context.translate(camera.offsetX * 2, camera.offsetY * 2);
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile, gamestate.piecesCoveredByTile(tile))).toList();
-  List<Move> moves = [];
-  if (selectedPiece != null) {
-    moves.addAll(selectedPiece.moves(gamestate));
-  }
-  List<MoveView> moveViews = moves.map((move) => new MoveView(
+  List<MoveView> moveViews = selectionState.validMoves.map((move) => new MoveView(
       move.targetLocation,
       gamestate.stackAt(move.targetLocation).length)
   ).toList();
