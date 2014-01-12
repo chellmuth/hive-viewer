@@ -188,7 +188,10 @@ void render(GameState gamestate, { List<Move> moves : null }) {
 
   List<TileView> tileViews = gamestate.toList().map((tile) => new TileView(tile, gamestate.piecesCoveredByTile(tile))).toList();
   if (moves == null) { moves = []; }
-  List<MoveView> moveViews = moves.map((move) => new MoveView(move.targetLocation)).toList();
+  List<MoveView> moveViews = moves.map((move) => new MoveView(
+      move.targetLocation,
+      gamestate.stackAt(move.targetLocation).length)
+  ).toList();
 
   List<HexView> hexViews = [];
   hexViews.addAll(tileViews);

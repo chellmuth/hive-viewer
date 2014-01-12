@@ -1,7 +1,7 @@
 library view;
 
 import 'dart:html';
-import 'dart:math' show PI;
+import 'dart:math' show PI, max;
 
 import 'assets.dart';
 import 'gamemodel.dart';
@@ -9,11 +9,15 @@ import 'gamestate.dart';
 
 part 'bench.dart';
 
+
 abstract class HexView {
   static final num width = 80 * 2;
   static final num height = 90 * 2;
 
   static final num pointHeight = .25;
+
+  static final num xStackOffset = 6;
+  static final num yStackOffset = 10;
 
   int get row;
   int get col;
@@ -24,12 +28,17 @@ abstract class HexView {
   num get xOffset {
     var xOffset = col * width;
     if (row % 2 == 1) { xOffset += .5 * width; }
+
+    xOffset += (stackHeight - 1) * xStackOffset;
+
     xOffset += 1;
     return xOffset;
   }
 
   num get yOffset {
     var yOffset = row * height * .75;
+    yOffset -= (stackHeight - 1) * yStackOffset;
+
     yOffset += 1;
     return yOffset;
   }
@@ -54,7 +63,11 @@ abstract class HexView {
 
 class MoveView extends HexView {
   Coordinate location;
-  MoveView(this.location);
+  int stackHeight;
+  MoveView(this.location, stackHeight) {
+    print(stackHeight);
+    this.stackHeight = max(1, stackHeight);
+  }
 
   int get row => location.row;
   int get col => location.col;
@@ -81,10 +94,6 @@ class TileView extends HexView {
     //super.draw(context);
 
     context.save();
-
-    var xStackOffset = 6, yStackOffset = 10;
-    var xOffset = this.xOffset + (tile.height - 1) * xStackOffset;
-    var yOffset = this.yOffset - (tile.height - 1) * yStackOffset;
 
     ImageElement asset = AssetLibrary.imageForPiece(tile.piece);
     context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);
