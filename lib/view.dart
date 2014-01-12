@@ -23,8 +23,8 @@ abstract class HexView {
   int get row;
   int get col;
   int get stackHeight => 1;
-  String get strokeColor;
-  String get fillColor;
+  String get strokeColor => '#000';
+  String get fillColor => '#fff';
 
   num get xOffset {
     var xOffset = col * width;
@@ -71,8 +71,15 @@ class MoveView extends HexView {
 
   int get row => location.row;
   int get col => location.col;
-  String get fillColor => 'rgba(255, 153, 154, 0.8)';
-  String get strokeColor => Color.TileBorder;
+
+  void draw(CanvasRenderingContext2D context) {
+    context.save();
+
+    ImageElement asset = AssetLibrary.imageNamed("move-tile");
+    context.drawImageScaledFromSource(asset, 0, 0, asset.naturalWidth, asset.naturalHeight, xOffset - 6, yOffset - 4, asset.naturalWidth, asset.naturalHeight);
+
+    context.restore();
+  }
 }
 
 class TileView extends HexView {
@@ -87,8 +94,6 @@ class TileView extends HexView {
   int get row => tile.row;
   int get col => tile.col;
   int get stackHeight => tile.height;
-  String get fillColor => tile.piece.player == Player.WHITE ? Color.BlackTile : Color.WhiteTile;
-  String get strokeColor => Color.TileBorder;
 
   void draw(CanvasRenderingContext2D context) {
     //super.draw(context);
