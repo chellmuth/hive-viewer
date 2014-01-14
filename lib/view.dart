@@ -146,7 +146,7 @@ class TileView extends HexView {
   void _renderDot(CanvasRenderingContext2D context, Rectangle boundingRect, num xCenter, num yCenter) {
     context.save();
 
-    context.fillStyle = fillColor;
+    context.fillStyle = tile.piece.player == Player.WHITE ? Color.BlackTile : Color.WhiteTile;
     context.beginPath();
     context.arc(boundingRect.left + xCenter * boundingRect.width, boundingRect.top + yCenter * boundingRect.height, TileView.dotRadius, 0, PI * 2, true);
     context.closePath();
