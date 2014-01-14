@@ -161,7 +161,7 @@ void setupSGF(String sgf, GameState gamestate) {
     window.alert("Game type${plural} not supported: ${gameType}");
     return;
   }
-  bench = new Bench(parsedGame.player1, parsedGame.player2);
+  bench = new Bench(parsedGame.expansionBugs, parsedGame.player1, parsedGame.player2);
   selectionState.clear();
   gamestate.initialize(parsedGame.gameEvents);
   gamestate.step(1);

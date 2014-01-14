@@ -13,6 +13,8 @@ class ParsedGame {
 
   bool valid = true;
   List<String> errors = [];
+
+  List<Bug> expansionBugs = [];
 }
 
 class SGF {
@@ -40,6 +42,9 @@ class SGF {
         game.errors.add("Ultimate");
         game.valid = false;
       } else {
+        if (gameType.contains("m")) {
+          game.expansionBugs.add(Bug.MOSQUITO);
+        }
         if (gameType.contains("l")) {
           game.errors.add("Ladybug");
           game.valid = false;

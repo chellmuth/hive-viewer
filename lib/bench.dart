@@ -3,8 +3,15 @@ part of view;
 class Bench {
   static num height = 260;
 
+  List<Bug> expansionBugs;
   String player1, player2;
-  Bench(this.player1, this.player2);
+  Bench(this.expansionBugs, this.player1, this.player2);
+
+  List<Bug> get bugs {
+    var baseBugs = [ Bug.ANT, Bug.GRASSHOPPER, Bug.SPIDER, Bug.BEETLE, Bug.QUEEN ];
+    baseBugs.addAll(this.expansionBugs);
+    return baseBugs;
+  }
 
   void draw(CanvasRenderingContext2D context, CanvasElement canvas, GameState gamestate) {
     context.save();
@@ -14,9 +21,11 @@ class Bench {
     context.fillStyle = 'rgba(236, 217, 176, .95)';
     var widthRatio = .5;
 
-    var left = canvas.width * (1 - widthRatio) / 2;
+    var extraWidth = expansionBugs.length * 260;
+
+    var left = canvas.width * (1 - widthRatio) / 2 - extraWidth / 2;
     var top = canvas.height - height;
-    var width = canvas.width * widthRatio;
+    var width = canvas.width * widthRatio + extraWidth;
     context.beginPath();
     context.rect(left, top, width, height + 1);
     context.fill();
@@ -46,13 +55,12 @@ class Bench {
 
     var totalBugWidth = 0;
     var assetRatio = 3/4;
-    var bugs = [ Bug.ANT, Bug.GRASSHOPPER, Bug.SPIDER, Bug.BEETLE, Bug.QUEEN ];
     for (var bug in bugs) {
       ImageElement asset = AssetLibrary.imageForPiece(new Piece(player, bug, 0));
       totalBugWidth += asset.naturalWidth * assetRatio;
     }
     var xOrigin = (bounds.width - totalBugWidth) / 2 + bounds.left;
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < bugs.length; i++) {
       var count = benchPieces[bugs[i]];
       if (count == 0) { continue; }
       ImageElement asset = AssetLibrary.imageForPiece(new Piece(player, bugs[i], 0));
