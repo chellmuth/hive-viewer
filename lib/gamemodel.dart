@@ -39,6 +39,7 @@ class Bug {
   static const BEETLE = const Bug._internal('BEETLE');
   static const SPIDER = const Bug._internal('SPIDER');
   static const GRASSHOPPER = const Bug._internal('GRASSHOPPER');
+  static const MOSQUITO = const Bug._internal('MOSQUITO');
 
   static parse(String bug) {
     switch(bug) {
@@ -56,6 +57,9 @@ class Bug {
 
       case 'g':
       case 'G': return Bug.GRASSHOPPER;
+
+      case 'm':
+      case 'M': return Bug.MOSQUITO;
     }
     throw new Exception("Invalid bug: " + bug);
   }
@@ -80,6 +84,8 @@ class Piece {
         return new Queen._internal(player, bugCount);
       case Bug.SPIDER:
         return new Spider._internal(player, bugCount);
+      case Bug.MOSQUITO:
+        return new Mosquito._internal(player, bugCount);
     }
   }
 

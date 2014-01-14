@@ -168,6 +168,7 @@ class CoveredPieceView {
       case Bug.GRASSHOPPER: return 'G';
       case Bug.QUEEN: return 'Q';
       case Bug.SPIDER: return 'S';
+      case Bug.MOSQUITO: return 'M';
     }
   }
 
@@ -178,6 +179,7 @@ class CoveredPieceView {
       case Bug.GRASSHOPPER: return '#9ADA54';
       case Bug.QUEEN: return '#F8E71C';
       case Bug.SPIDER: return '#CA9668';
+      case Bug.MOSQUITO: return '#D4D4D4';
     }
   }
 

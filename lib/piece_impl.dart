@@ -49,3 +49,11 @@ class Spider extends Piece {
     return RangedSlideMoveFinder.findMoves(3, this, gamestate);
   }
 }
+
+class Mosquito extends Piece {
+  Mosquito._internal(player, bugCount) : super._internal(player, Bug.MOSQUITO, bugCount);
+
+  List<Move> moves(GameState gamestate) {
+    return [];
+  }
+}

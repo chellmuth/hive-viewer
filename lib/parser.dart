@@ -35,19 +35,18 @@ class SGF {
     var gameTypeExp = new RegExp(r'^SU\[hive(-\w+)\]');
     var gameTypeMatch = gameTypeExp.firstMatch(line);
     if (gameTypeMatch != null) {
-      game.valid = false;
       var gameType = gameTypeMatch.group(1);
       if (gameType.contains("ultimate")) {
         game.errors.add("Ultimate");
+        game.valid = false;
       } else {
         if (gameType.contains("l")) {
           game.errors.add("Ladybug");
-        }
-        if (gameType.contains("m")) {
-          game.errors.add("Mosquito");
+          game.valid = false;
         }
         if (gameType.contains("p")) {
           game.errors.add("Pillbug");
+          game.valid = false;
         }
       }
     }
@@ -68,14 +67,14 @@ class SGF {
       return;
     }
 
-    var playerMoveExp = new RegExp(r"; P(\d)\[\d+ p?dropb ([wb])([AaBbGgQqSs])([123])? \w+ \d+ ([^\]]+)]");
+    var playerMoveExp = new RegExp(r"; P(\d)\[\d+ p?dropb ([wb])([AaBbGgQqSsMm])([123])? \w+ \d+ ([^\]]+)]");
     var match = playerMoveExp.firstMatch(line);
     if (match != null) {
       game.gameEvents.add(_parseGameEvent(match));
       return;
     }
 
-    var computerMoveExp = new RegExp(r"; P(\d)\[\d+ move ([WB]) [wb]?([ABGQS])([123])? \w+ \d+ ([^\]]+)\]");
+    var computerMoveExp = new RegExp(r"; P(\d)\[\d+ move ([WB]) [wb]?([ABGQSM])([123])? \w+ \d+ ([^\]]+)\]");
     var computerMatch = computerMoveExp.firstMatch(line);
     if (computerMatch != null) {
       game.gameEvents.add(_parseGameEvent(computerMatch));
@@ -90,26 +89,38 @@ class SGF {
     var bugCount = match.group(4);
     var relativeTo = match.group(5);
 
-    var piece = new Piece(Player.parse(color), Bug.parse(bug), _parseBugCount(bugCount));
+    var bugType = Bug.parse(bug);
+    var piece = new Piece(Player.parse(color), bugType, _parseBugCount(bugCount, bugType));
     var relativePiece = _parseRelativePiece(relativeTo);
     var direction = _parseDirection(relativeTo);
-
     return new GameEvent(piece, relativePiece, direction);
   }
 
-  static num _parseBugCount(String bugCount) {
-    if (bugCount == null) { return 0; }
+  static num _parseBugCount(String bugCount, Bug bugType) {
+    if (bugCount == null) {
+      switch (bugType) {
+        case Bug.ANT:
+        case Bug.BEETLE:
+        case Bug.GRASSHOPPER:
+        case Bug.SPIDER:
+        case Bug.MOSQUITO:
+          return 1;
+        case Bug.QUEEN:
+          return 0;
+      }
+    }
     return int.parse(bugCount, radix: 10);
   }
 
   static Piece _parseRelativePiece(String relativeTo) {
-    var pieceExp = new RegExp(r"([wb])([ABGQS])([123])?");
+    var pieceExp = new RegExp(r"([wb])([ABGQSM])([123])?");
     var match = pieceExp.firstMatch(relativeTo);
     if (match != null) {
       var color = match.group(1);
       var bug = match.group(2);
       var bugCount = match.group(3);
-      return new Piece(Player.parse(color), Bug.parse(bug), _parseBugCount(bugCount));
+      var bugType = Bug.parse(bug);
+      return new Piece(Player.parse(color), bugType, _parseBugCount(bugCount, bugType));
     }
     return null;
   }

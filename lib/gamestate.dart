@@ -87,7 +87,7 @@ class GameState {
 
       Coordinate relativeLocation = pieceLocations[event.relativePiece];
       if (relativeLocation == null) {
-        throw new Exception("Can't find relative piece");
+        throw new Exception("Can't find relative piece: ${event.piece}, ${currentLocation}");
       }
       var targetLocation = relativeLocation.applyDirection(event.direction);
       pieceLocations[event.piece] = targetLocation;
@@ -164,6 +164,7 @@ class GameState {
     bench[Bug.GRASSHOPPER] = 3;
     bench[Bug.QUEEN] = 1;
     bench[Bug.SPIDER] = 2;
+    bench[Bug.MOSQUITO] = 1;
 
     for (Tile tile in tiles) {
       if (tile.piece.player == player) {
