@@ -203,6 +203,7 @@ class Camera {
 void layoutCanvas() {
   DivElement header = querySelector('#header-id');
   DivElement progressBar = querySelector('#progress-bar-id');
+  progressBar.style.visibility = 'visible';
 
   CanvasElement canvas = querySelector("#hive-canvas-id");
   var width = window.innerWidth;

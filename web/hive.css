@@ -80,6 +80,7 @@ canvas {
 #progress-bar-id {
   height: 16px;
   background-color: #595959;
+  visibility: hidden;
 }
 
 .progress-bar-contents {
